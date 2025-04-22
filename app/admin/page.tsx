@@ -6,9 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { useSupabase } from "@/components/supabase-provider"
-import { UserAccessTable } from "@/components/admin/user-access-table"
+import { AccessRequestTable } from "@/components/admin/access-request-table"
+import { UserManagementTable } from "@/components/admin/user-management-table"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Users, ClipboardList } from "lucide-react"
 
 export default function AdminPage() {
   const [accessRequests, setAccessRequests] = useState<any[]>([])
@@ -20,24 +21,12 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true)
+
         // Fetch access requests
         const { data: requests, error: requestsError } = await supabase
           .from("access_requests")
-          .select(`
-            id,
-            user_id,
-            status,
-            created_at,
-            updated_at,
-            reviewed_by,
-            review_notes,
-            profiles:user_id (
-              full_name,
-              email,
-              organization,
-              investor_type
-            )
-          `)
+          .select("*")
           .order("created_at", { ascending: false })
 
         if (requestsError) throw requestsError
@@ -65,40 +54,35 @@ export default function AdminPage() {
     fetchData()
   }, [supabase, toast])
 
-  const handleApproveRequest = async (userId: string) => {
+  const handleApproveRequest = async (requestId: string) => {
     try {
+      // Get the request details
+      const request = accessRequests.find((r) => r.id === requestId)
+      if (!request) throw new Error("Request not found")
+
       // Update access_requests table
-      const { error: requestError } = await supabase
+      const { error: updateError } = await supabase
         .from("access_requests")
         .update({
           status: "approved",
           updated_at: new Date().toISOString(),
+          reviewed_by: (await supabase.auth.getUser()).data.user?.id,
         })
-        .eq("user_id", userId)
+        .eq("id", requestId)
 
-      if (requestError) throw requestError
+      if (updateError) throw updateError
 
-      // Update profiles table
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .update({
-          access_granted: true,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", userId)
+      // Send invitation email using Supabase Auth
+      const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(request.email)
 
-      if (profileError) throw profileError
+      if (inviteError) throw inviteError
 
       // Update local state
-      setAccessRequests(
-        accessRequests.map((request) => (request.user_id === userId ? { ...request, status: "approved" } : request)),
-      )
-
-      setUsers(users.map((user) => (user.id === userId ? { ...user, access_granted: true } : user)))
+      setAccessRequests(accessRequests.map((req) => (req.id === requestId ? { ...req, status: "approved" } : req)))
 
       toast({
-        title: "Access granted",
-        description: "The user now has access to the platform",
+        title: "Request approved",
+        description: `An invitation has been sent to ${request.email}`,
       })
     } catch (error: any) {
       toast({
@@ -109,27 +93,26 @@ export default function AdminPage() {
     }
   }
 
-  const handleRejectRequest = async (userId: string) => {
+  const handleRejectRequest = async (requestId: string) => {
     try {
       // Update access_requests table
-      const { error: requestError } = await supabase
+      const { error: updateError } = await supabase
         .from("access_requests")
         .update({
           status: "rejected",
           updated_at: new Date().toISOString(),
+          reviewed_by: (await supabase.auth.getUser()).data.user?.id,
         })
-        .eq("user_id", userId)
+        .eq("id", requestId)
 
-      if (requestError) throw requestError
+      if (updateError) throw updateError
 
       // Update local state
-      setAccessRequests(
-        accessRequests.map((request) => (request.user_id === userId ? { ...request, status: "rejected" } : request)),
-      )
+      setAccessRequests(accessRequests.map((req) => (req.id === requestId ? { ...req, status: "rejected" } : req)))
 
       toast({
-        title: "Access rejected",
-        description: "The user's access request has been rejected",
+        title: "Request rejected",
+        description: "The access request has been rejected",
       })
     } catch (error: any) {
       toast({
@@ -168,12 +151,12 @@ export default function AdminPage() {
     }
   }
 
-  const handleRevokeAccess = async (userId: string) => {
+  const handleToggleAccess = async (userId: string, currentStatus: boolean) => {
     try {
       const { error } = await supabase
         .from("profiles")
         .update({
-          access_granted: false,
+          access_granted: !currentStatus,
           updated_at: new Date().toISOString(),
         })
         .eq("id", userId)
@@ -181,11 +164,11 @@ export default function AdminPage() {
       if (error) throw error
 
       // Update local state
-      setUsers(users.map((user) => (user.id === userId ? { ...user, access_granted: false } : user)))
+      setUsers(users.map((user) => (user.id === userId ? { ...user, access_granted: !currentStatus } : user)))
 
       toast({
-        title: "Access revoked",
-        description: "The user's access has been revoked",
+        title: currentStatus ? "Access revoked" : "Access granted",
+        description: `The user's access has been ${currentStatus ? "revoked" : "granted"}`,
       })
     } catch (error: any) {
       toast({
@@ -197,7 +180,11 @@ export default function AdminPage() {
   }
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading...</div>
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#B68D53]"></div>
+      </div>
+    )
   }
 
   const pendingRequests = accessRequests.filter((request) => request.status === "pending")
@@ -229,8 +216,14 @@ export default function AdminPage() {
 
       <Tabs defaultValue="requests">
         <TabsList className="mb-4">
-          <TabsTrigger value="requests">Access Requests</TabsTrigger>
-          <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsTrigger value="requests" className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            Access Requests
+          </TabsTrigger>
+          <TabsTrigger value="users" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            User Management
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="requests">
@@ -240,7 +233,7 @@ export default function AdminPage() {
               <CardDescription>Manage user access requests to the platform</CardDescription>
             </CardHeader>
             <CardContent>
-              <UserAccessTable
+              <AccessRequestTable
                 requests={accessRequests}
                 onApprove={handleApproveRequest}
                 onReject={handleRejectRequest}
@@ -256,73 +249,7 @@ export default function AdminPage() {
               <CardDescription>Manage existing users and their permissions</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b bg-muted/50">
-                      <th className="py-3 px-4 text-left font-medium">Name</th>
-                      <th className="py-3 px-4 text-left font-medium">Email</th>
-                      <th className="py-3 px-4 text-left font-medium">Organization</th>
-                      <th className="py-3 px-4 text-left font-medium">Role</th>
-                      <th className="py-3 px-4 text-left font-medium">Access</th>
-                      <th className="py-3 px-4 text-left font-medium">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="py-4 text-center text-muted-foreground">
-                          No users found
-                        </td>
-                      </tr>
-                    ) : (
-                      users.map((user) => (
-                        <tr key={user.id} className="border-b">
-                          <td className="py-3 px-4">{user.full_name || "N/A"}</td>
-                          <td className="py-3 px-4">{user.email || "N/A"}</td>
-                          <td className="py-3 px-4">{user.organization || "N/A"}</td>
-                          <td className="py-3 px-4">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs ${
-                                user.role === "admin" ? "bg-purple-100 text-purple-800" : "bg-gray-100 text-gray-800"
-                              }`}
-                            >
-                              {user.role || "user"}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs ${
-                                user.access_granted ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {user.access_granted ? "Granted" : "Denied"}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex gap-2">
-                              {user.role !== "admin" && (
-                                <Button size="sm" variant="outline" onClick={() => handleMakeAdmin(user.id)}>
-                                  Make Admin
-                                </Button>
-                              )}
-                              {user.access_granted ? (
-                                <Button size="sm" variant="destructive" onClick={() => handleRevokeAccess(user.id)}>
-                                  Revoke Access
-                                </Button>
-                              ) : (
-                                <Button size="sm" onClick={() => handleApproveRequest(user.id)}>
-                                  Grant Access
-                                </Button>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+              <UserManagementTable users={users} onMakeAdmin={handleMakeAdmin} onToggleAccess={handleToggleAccess} />
             </CardContent>
           </Card>
         </TabsContent>

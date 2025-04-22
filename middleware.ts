@@ -18,10 +18,16 @@ export async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
 
   // Public routes that should redirect to dashboard if already authenticated
-  const publicAuthRoutes = ["/login", "/register"]
+  const publicAuthRoutes = ["/login"]
   const isPublicAuthRoute = publicAuthRoutes.some((route) => req.nextUrl.pathname.startsWith(route))
 
-  // Redirect authenticated users away from login/register pages
+  // Check if this is an invitation acceptance URL
+  const isInvitationUrl =
+    req.nextUrl.pathname.startsWith("/auth/callback") &&
+    req.nextUrl.searchParams.has("type") &&
+    req.nextUrl.searchParams.get("type") === "invite"
+
+  // Redirect authenticated users away from login pages
   if (isAuthenticated && isPublicAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", req.url))
   }
@@ -31,9 +37,15 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url))
   }
 
+  // Handle invitation acceptance
+  if (isInvitationUrl) {
+    // Let the invitation flow continue
+    return res
+  }
+
   return res
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/auth/callback"],
 }
