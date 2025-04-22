@@ -17,7 +17,7 @@ type SupabaseContextType = {
 
 const SupabaseContext = createContext<SupabaseContextType | undefined>(undefined)
 
-export default function SupabaseProvider({ children }: { children: React.ReactNode }) {
+export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -36,10 +36,16 @@ export default function SupabaseProvider({ children }: { children: React.ReactNo
       setIsLoading(false)
 
       const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.email)
         setSession(session)
         setUser(session?.user ?? null)
         setIsLoading(false)
-        router.refresh()
+
+        if (event === "SIGNED_IN" && window.location.pathname === "/login") {
+          router.push("/dashboard")
+        } else if (event === "SIGNED_OUT") {
+          router.push("/login")
+        }
       })
 
       return () => {
