@@ -1,67 +1,107 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { createServerClient } from "@/lib/supabase"
 
-export default async function AdminDashboard() {
+export default async function AdminDashboardPage() {
   const supabase = createServerClient()
 
-  // Fetch counts for dashboard
-  const { count: userCount } = await supabase.from("profiles").select("*", { count: "exact", head: true })
+  // Get counts for dashboard
+  const { count: totalUsers } = await supabase.from("profiles").select("*", { count: "exact", head: true })
 
-  const { count: pendingAccessRequestsCount } = await supabase
+  const { count: pendingRequests } = await supabase
     .from("access_requests")
     .select("*", { count: "exact", head: true })
     .eq("status", "pending")
 
-  const { count: pendingInvitationsCount } = await supabase
-    .from("invitations")
+  const { count: approvedRequests } = await supabase
+    .from("access_requests")
     .select("*", { count: "exact", head: true })
-    .eq("status", "pending")
+    .eq("status", "approved")
+
+  const { count: adminUsers } = await supabase
+    .from("profiles")
+    .select("*", { count: "exact", head: true })
+    .eq("role", "admin")
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-[#503E24] font-playfair">Admin Dashboard</h1>
+      <div>
+        <h1 className="text-3xl font-bold text-[#503E24]">Admin Dashboard</h1>
+        <p className="text-[#503E24]/70 mt-1">Manage users, access requests, and system settings</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-white border-[#B68D53]/20">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-[#503E24] text-lg">Total Users</CardTitle>
+            <CardTitle className="text-lg text-[#503E24]">Total Users</CardTitle>
+            <CardDescription>Registered users</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-[#B68D53]">{userCount || 0}</p>
+            <div className="text-3xl font-bold text-[#B68D53]">{totalUsers || 0}</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#B68D53]/20">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-[#503E24] text-lg">Pending Access Requests</CardTitle>
+            <CardTitle className="text-lg text-[#503E24]">Pending Requests</CardTitle>
+            <CardDescription>Awaiting approval</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-[#B68D53]">{pendingAccessRequestsCount || 0}</p>
+            <div className="text-3xl font-bold text-[#B68D53]">{pendingRequests || 0}</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#B68D53]/20">
+        <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-[#503E24] text-lg">Pending Invitations</CardTitle>
+            <CardTitle className="text-lg text-[#503E24]">Approved Users</CardTitle>
+            <CardDescription>Users with access</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold text-[#B68D53]">{pendingInvitationsCount || 0}</p>
+            <div className="text-3xl font-bold text-[#B68D53]">{approvedRequests || 0}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg text-[#503E24]">Admin Users</CardTitle>
+            <CardDescription>Users with admin rights</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-[#B68D53]">{adminUsers || 0}</div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="bg-white border border-[#B68D53]/20 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-[#503E24] mb-4">Admin Overview</h2>
-        <p className="text-[#503E24]/80">
-          Welcome to the Sanctum Bali admin dashboard. From here, you can manage users, review access requests, track
-          invitations, and configure system settings.
-        </p>
-        <ul className="mt-4 space-y-2 text-[#503E24]/80">
-          <li>• Review and approve investor access requests</li>
-          <li>• Manage user accounts and permissions</li>
-          <li>• Track invitation status and conversions</li>
-          <li>• Configure system settings and preferences</li>
-        </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-[#503E24]">Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-[#503E24]/70">View and manage recent user activity and system events.</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-[#503E24]">System Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-[#503E24]/70">Database</span>
+                <span className="text-green-500 font-medium">Online</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[#503E24]/70">Authentication</span>
+                <span className="text-green-500 font-medium">Online</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[#503E24]/70">Storage</span>
+                <span className="text-green-500 font-medium">Online</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

@@ -1,51 +1,59 @@
 "use server"
 
 import { createServerClient } from "@/lib/supabase"
-import { randomUUID } from "crypto"
+import { isUserAdmin } from "@/lib/admin-utils"
+import { revalidatePath } from "next/cache"
 
 export async function createAdminUser(formData: FormData) {
   const supabase = createServerClient()
-  const email = formData.get("email") as string
-  const password = (formData.get("password") as string) || randomUUID().substring(0, 8)
 
-  try {
-    // Create the user in Supabase Auth
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true, // Auto-confirm the email
-      user_metadata: {
-        full_name: "Rod Wilson",
-      },
-    })
+  // Get the current user
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-    if (authError) {
-      return {
-        success: false,
-        message: `Error creating user: ${authError.message}`,
-      }
-    }
-
-    // Set the user as admin in the profiles table
-    const { error: profileError } = await supabase.from("profiles").update({ role: "admin" }).eq("id", authData.user.id)
-
-    if (profileError) {
-      return {
-        success: false,
-        message: `Error setting admin role: ${profileError.message}`,
-      }
-    }
-
-    return {
-      success: true,
-      message: `Admin user created successfully with email ${email}. Password: ${password}`,
-      userId: authData.user.id,
-    }
-  } catch (error) {
-    console.error("Error in createAdminUser:", error)
-    return {
-      success: false,
-      message: `Unexpected error: ${error instanceof Error ? error.message : String(error)}`,
-    }
+  if (!session?.user) {
+    return { success: false, message: "Not authenticated" }
   }
+
+  // Check if user is admin
+  const isAdmin = await isUserAdmin(session.user.id)
+  if (!isAdmin) {
+    return { success: false, message: "Not authorized" }
+  }
+
+  const email = formData.get("email") as string
+
+  if (!email) {
+    return { success: false, message: "Email is required" }
+  }
+
+  // Check if user exists
+  const { data: existingUser, error: userError } = await supabase
+    .from("profiles")
+    .select("id, role")
+    .eq("email", email)
+    .single()
+
+  if (userError && userError.code !== "PGRST116") {
+    return { success: false, message: "Error checking user existence" }
+  }
+
+  if (existingUser) {
+    if (existingUser.role === "admin") {
+      return { success: false, message: "User is already an admin" }
+    }
+
+    // Update existing user to admin
+    const { error: updateError } = await supabase.from("profiles").update({ role: "admin" }).eq("id", existingUser.id)
+
+    if (updateError) {
+      return { success: false, message: "Failed to update user role" }
+    }
+
+    revalidatePath("/admin/users")
+    return { success: true, message: "User role updated to admin successfully" }
+  }
+
+  return { success: false, message: "User not found. They must register first." }
 }

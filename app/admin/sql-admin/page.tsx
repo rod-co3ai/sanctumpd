@@ -1,85 +1,92 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { useSupabase } from "@/components/supabase-provider"
 
 export default function SqlAdminPage() {
+  const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<string | null>(null)
   const { toast } = useToast()
+  const { supabase } = useSupabase()
 
-  const sqlQuery = `
--- This SQL will create a user with email rodwilson77@gmail.com and set them as admin
--- Run this in the Supabase SQL Editor
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
 
--- First, check if the user already exists
-DO $$
-DECLARE
-  user_id uuid;
-BEGIN
-  -- Try to get the user ID from auth.users
-  SELECT id INTO user_id FROM auth.users WHERE email = 'rodwilson77@gmail.com';
-  
-  IF user_id IS NULL THEN
-    RAISE NOTICE 'User does not exist. Please create the user first using Supabase Auth API.';
-  ELSE
-    -- Update the user's role in the profiles table
-    UPDATE profiles SET role = 'admin' WHERE id = user_id;
-    
-    IF NOT FOUND THEN
-      -- If the profile doesn't exist, create it
-      INSERT INTO profiles (id, full_name, role) VALUES (user_id, 'Rod Wilson', 'admin');
-    END IF;
-    
-    RAISE NOTICE 'User with ID % has been set as admin', user_id;
-  END IF;
-END $$;
-  `
-
-  async function copyToClipboard() {
     try {
-      await navigator.clipboard.writeText(sqlQuery)
+      // First, get the user ID from the email
+      const { data: userData, error: userError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", email)
+        .single()
+
+      if (userError) {
+        throw new Error("User not found with that email")
+      }
+
+      // Update the user's role to admin
+      const { error: updateError } = await supabase.from("profiles").update({ role: "admin" }).eq("id", userData.id)
+
+      if (updateError) {
+        throw new Error("Failed to update user role")
+      }
+
       toast({
-        title: "Copied to clipboard",
-        description: "SQL query copied to clipboard",
+        title: "Success",
+        description: `User ${email} has been granted admin privileges`,
       })
-    } catch (error) {
+      setEmail("")
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to copy to clipboard",
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="max-w-3xl mx-auto">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-[#503E24]">SQL Admin Access</h1>
+        <p className="text-[#503E24]/70 mt-1">Directly set admin privileges via SQL</p>
+      </div>
+
+      <Card className="max-w-md">
         <CardHeader>
-          <CardTitle>SQL Query to Set Admin</CardTitle>
-          <CardDescription>
-            Copy this SQL query and run it in the Supabase SQL Editor to set rodwilson77@gmail.com as admin
-          </CardDescription>
+          <CardTitle className="text-[#503E24]">Set Admin User</CardTitle>
+          <CardDescription>Enter the email of an existing user to grant them admin privileges</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="bg-gray-100 p-4 rounded-md overflow-x-auto">
-            <pre className="text-sm">{sqlQuery}</pre>
-          </div>
-          <div className="mt-4">
-            <Button onClick={copyToClipboard}>Copy to Clipboard</Button>
-          </div>
-          <div className="mt-6 text-sm text-muted-foreground">
-            <p className="font-medium">Instructions:</p>
-            <ol className="list-decimal pl-5 mt-2 space-y-1">
-              <li>Go to the Supabase Dashboard</li>
-              <li>Navigate to the SQL Editor</li>
-              <li>Paste the SQL query</li>
-              <li>Run the query</li>
-              <li>The user will be set as admin if they exist in the auth.users table</li>
-            </ol>
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-[#503E24]">
+                User Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="border-[#B68D53]/20"
+              />
+            </div>
+            <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
+              {isLoading ? "Processing..." : "Set as Admin"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>

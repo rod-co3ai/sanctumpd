@@ -1,85 +1,79 @@
 "use client"
 
+import type React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Users, ClipboardList, Settings, BarChart3, Mail, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { signOut } from "@/app/actions/auth-actions"
+import { LayoutDashboard, Users, Settings, ChevronRight, Mail } from "lucide-react"
 
-const adminNavItems = [
-  {
-    name: "Dashboard",
-    href: "/admin",
-    icon: BarChart3,
-  },
-  {
-    name: "User Management",
-    href: "/admin/users",
-    icon: Users,
-  },
-  {
-    name: "Access Requests",
-    href: "/admin/access-requests",
-    icon: ClipboardList,
-  },
-  {
-    name: "Invitations",
-    href: "/admin/invitations",
-    icon: Mail,
-  },
-  {
-    name: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
-]
+interface AdminNavItemProps {
+  href: string
+  icon: React.ReactNode
+  label: string
+  isActive: boolean
+}
+
+function AdminNavItem({ href, icon, label, isActive }: AdminNavItemProps) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 rounded-lg px-3 py-2 transition-all",
+        isActive ? "bg-[#B68D53] text-white" : "text-[#503E24] hover:bg-[#B68D53]/10 hover:text-[#503E24]",
+      )}
+    >
+      {icon}
+      <span>{label}</span>
+      {isActive && <ChevronRight className="ml-auto h-4 w-4" />}
+    </Link>
+  )
+}
 
 export function AdminSidebar() {
   const pathname = usePathname()
 
+  const navItems = [
+    { href: "/admin", icon: <LayoutDashboard className="h-5 w-5" />, label: "Dashboard" },
+    { href: "/admin/access-requests", icon: <Mail className="h-5 w-5" />, label: "Access Requests" },
+    { href: "/admin/users", icon: <Users className="h-5 w-5" />, label: "Users" },
+    { href: "/admin/settings", icon: <Settings className="h-5 w-5" />, label: "Settings" },
+  ]
+
   return (
-    <div className="w-64 bg-white border-r border-[#B68D53]/20 p-4 flex flex-col h-screen">
-      <div className="flex items-center justify-center mb-8 pt-4">
-        <div className="h-12 w-12 bg-[#B68D53] rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-xl">S</span>
-        </div>
-        <span className="ml-2 text-xl font-bold text-[#503E24]">Admin</span>
-      </div>
-
-      <nav className="flex-1">
-        <ul className="space-y-2">
-          {adminNavItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className={cn(
-                  "flex items-center p-2 rounded-md text-[#503E24] hover:bg-[#F8F5F0] transition-colors",
-                  pathname === item.href && "bg-[#F8F5F0] text-[#B68D53]",
-                )}
-              >
-                <item.icon className="h-5 w-5 mr-3" />
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="pt-4 border-t border-[#B68D53]/20 mt-4">
-        <Link
-          href="/dashboard"
-          className="flex items-center p-2 rounded-md text-[#503E24] hover:bg-[#F8F5F0] transition-colors"
-        >
-          <Users className="h-5 w-5 mr-3" />
-          Investor Dashboard
+    <div className="flex h-full flex-col gap-2">
+      <div className="flex h-14 items-center border-b px-4">
+        <Link href="/admin" className="flex items-center gap-2 font-semibold">
+          <div className="h-8 w-8 bg-[#B68D53] rounded-full flex items-center justify-center">
+            <span className="text-white font-bold">S</span>
+          </div>
+          <span className="text-[#503E24]">ADMIN</span>
         </Link>
-        <button
-          onClick={() => signOut()}
-          className="w-full flex items-center p-2 rounded-md text-[#503E24] hover:bg-[#F8F5F0] transition-colors mt-2"
-        >
-          <LogOut className="h-5 w-5 mr-3" />
-          Sign Out
-        </button>
+      </div>
+      <div className="flex-1 px-2">
+        <div className="space-y-1 py-2">
+          {navItems.map((item) => (
+            <AdminNavItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              isActive={pathname === item.href}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="mt-auto p-4">
+        <div className="rounded-lg bg-[#F8F5F0] p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-[#503E24]">Admin Portal</span>
+          </div>
+          <div className="text-xs text-[#503E24]/70 mb-3">Manage users, access requests, and system settings.</div>
+          <Link href="/dashboard">
+            <button className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white py-2 rounded-md text-sm">
+              Back to Dashboard
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   )

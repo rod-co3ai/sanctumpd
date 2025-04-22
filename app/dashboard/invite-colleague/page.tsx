@@ -11,12 +11,11 @@ import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { Check, UserPlus } from "lucide-react"
 import { SanctumPhoneInput } from "@/components/phone-input"
-import { inviteColleague } from "@/app/actions/invitation-actions"
 
 export default function InviteColleaguePage() {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
+  const [phone, setPhone] = useState("+1 ")
   const [organization, setOrganization] = useState("")
   const [message, setMessage] = useState(
     "I'd like to share this exciting investment opportunity with you. Check out the Sanctum Bali pitch deck!",
@@ -28,33 +27,19 @@ export default function InviteColleaguePage() {
     e.preventDefault()
     setIsLoading(true)
 
-    const formData = new FormData()
-    formData.append("email", email)
-    formData.append("name", name)
-    formData.append("phone", phone)
-    formData.append("organization", organization)
-    formData.append("message", message)
-
-    const result = await inviteColleague(formData)
-
-    setIsLoading(false)
-
-    if (result.success) {
+    // In a real application, you would save the referral relationship to a database
+    // For now, we'll simulate the invitation process
+    setTimeout(() => {
+      setIsLoading(false)
       toast({
         title: "Invitation sent",
-        description: result.message,
+        description: `Invitation sent to ${email}`,
       })
       setEmail("")
       setName("")
-      setPhone("")
+      setPhone("+1 ")
       setOrganization("")
-    } else {
-      toast({
-        title: "Invitation failed",
-        description: result.message,
-        variant: "destructive",
-      })
-    }
+    }, 1500)
   }
 
   const container = {

@@ -1,41 +1,38 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 
-export async function middleware(req: NextRequest) {
+export async function middleware(request: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  const supabase = createMiddlewareClient({ req: request, res })
 
   const {
     data: { session },
   } = await supabase.auth.getSession()
 
-  // If user is not signed in and the current path is in the dashboard, redirect to login
-  if (!session && req.nextUrl.pathname.startsWith("/dashboard")) {
-    const redirectUrl = new URL("/login", req.url)
+  // If the user is not logged in and trying to access a protected route
+  if (
+    !session &&
+    (request.nextUrl.pathname.startsWith("/dashboard") || request.nextUrl.pathname.startsWith("/admin"))
+  ) {
+    const redirectUrl = new URL("/login", request.url)
     return NextResponse.redirect(redirectUrl)
   }
 
-  // Check if user is trying to access admin routes
-  if (req.nextUrl.pathname.startsWith("/admin")) {
-    if (!session) {
-      const redirectUrl = new URL("/login", req.url)
-      return NextResponse.redirect(redirectUrl)
-    }
-
+  // If the user is trying to access admin routes
+  if (request.nextUrl.pathname.startsWith("/admin")) {
     try {
-      // Fetch user role from profiles table
-      const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single()
+      // Check if user is admin
+      const { data, error } = await supabase.from("profiles").select("role").eq("id", session?.user?.id).single()
 
-      // Redirect non-admin users
-      if (!profile || profile.role !== "admin") {
-        const redirectUrl = new URL("/dashboard", req.url)
+      if (error || data?.role !== "admin") {
+        // Redirect non-admin users to dashboard
+        const redirectUrl = new URL("/dashboard", request.url)
         return NextResponse.redirect(redirectUrl)
       }
     } catch (error) {
       console.error("Error in middleware:", error)
-      // If there's an error, redirect to dashboard as a fallback
-      const redirectUrl = new URL("/dashboard", req.url)
+      const redirectUrl = new URL("/dashboard", request.url)
       return NextResponse.redirect(redirectUrl)
     }
   }

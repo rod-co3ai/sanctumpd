@@ -1,17 +1,30 @@
 import { createServerClient } from "@/lib/supabase"
 
-export async function isUserAdmin(userId: string): Promise<boolean> {
+export async function isUserAdmin(userId: string) {
   const supabase = createServerClient()
 
-  const { data } = await supabase.from("profiles").select("role").eq("id", userId).single()
+  const { data, error } = await supabase.from("profiles").select("role").eq("id", userId).single()
+
+  if (error) {
+    console.error("Error checking admin status:", error)
+    return false
+  }
 
   return data?.role === "admin"
 }
 
-export async function setUserAsAdmin(userId: string): Promise<boolean> {
+export async function getAccessRequests() {
   const supabase = createServerClient()
 
-  const { error } = await supabase.from("profiles").update({ role: "admin" }).eq("id", userId)
+  const { data, error } = await supabase
+    .from("access_requests")
+    .select("*, profiles(*)")
+    .order("created_at", { ascending: false })
 
-  return !error
+  if (error) {
+    console.error("Error fetching access requests:", error)
+    return []
+  }
+
+  return data
 }

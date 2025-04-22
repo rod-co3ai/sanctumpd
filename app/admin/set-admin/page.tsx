@@ -3,19 +3,18 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 
 export default function SetAdminPage() {
-  const [email, setEmail] = useState("rodwilson77@gmail.com")
+  const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<string | null>(null)
   const { toast } = useToast()
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -31,21 +30,19 @@ export default function SetAdminPage() {
       const data = await response.json()
 
       if (response.ok) {
-        setResult(`User with email ${email} has been set as admin`)
         toast({
           title: "Success",
-          description: `User with email ${email} has been set as admin`,
+          description: data.message,
         })
+        setEmail("")
       } else {
-        setResult(`Error: ${data.error}`)
         toast({
           title: "Error",
-          description: data.error,
+          description: data.message,
           variant: "destructive",
         })
       }
     } catch (error) {
-      setResult(`Error: ${error instanceof Error ? error.message : String(error)}`)
       toast({
         title: "Error",
         description: "An unexpected error occurred",
@@ -57,28 +54,38 @@ export default function SetAdminPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="max-w-md mx-auto">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-[#503E24]">API Admin Access</h1>
+        <p className="text-[#503E24]/70 mt-1">Set admin privileges via API endpoint</p>
+      </div>
+
+      <Card className="max-w-md">
         <CardHeader>
-          <CardTitle>Set Existing User as Admin</CardTitle>
-          <CardDescription>Update an existing user to have admin privileges</CardDescription>
+          <CardTitle className="text-[#503E24]">Set Admin User</CardTitle>
+          <CardDescription>Enter the email of an existing user to grant them admin privileges</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Label htmlFor="email" className="text-[#503E24]">
+                User Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="border-[#B68D53]/20"
+              />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
               {isLoading ? "Processing..." : "Set as Admin"}
             </Button>
           </form>
         </CardContent>
-        {result && (
-          <CardFooter className={`bg-${result.includes("Error") ? "red" : "green"}-50 p-4 text-sm rounded-b-lg`}>
-            <p className={result.includes("Error") ? "text-red-600" : "text-green-600"}>{result}</p>
-          </CardFooter>
-        )}
       </Card>
     </div>
   )

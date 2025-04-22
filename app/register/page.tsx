@@ -13,11 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { SanctumPhoneInput } from "@/components/phone-input"
-import { registerUser } from "@/app/actions/auth-actions"
+import { useSupabase } from "@/components/supabase-provider"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [phone, setPhone] = useState("")
   const [organization, setOrganization] = useState("")
   const [comments, setComments] = useState("")
@@ -25,6 +26,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { supabase } = useSupabase()
 
   const searchParams = useSearchParams()
   const referralCode = searchParams.get("ref")
@@ -33,33 +35,83 @@ export default function RegisterPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    const formData = new FormData()
-    formData.append("email", email)
-    formData.append("name", name)
-    formData.append("phone", phone)
-    formData.append("organization", organization)
-    formData.append("investorType", investorType)
-    formData.append("comments", comments)
-    if (referralCode) {
-      formData.append("referralCode", referralCode)
-    }
-
-    const result = await registerUser(formData)
-
-    setIsLoading(false)
-
-    if (result.success) {
-      toast({
-        title: "Registration request submitted",
-        description: result.message,
+    try {
+      // Register the user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+          },
+        },
       })
+
+      if (authError) {
+        toast({
+          title: "Registration failed",
+          description: authError.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Create profile
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: authData.user?.id,
+        email,
+        full_name: name,
+        phone,
+        organization,
+        access_granted: false,
+        role: "user",
+      })
+
+      if (profileError) {
+        toast({
+          title: "Profile creation failed",
+          description: profileError.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Create access request
+      const { error: requestError } = await supabase.from("access_requests").insert({
+        user_id: authData.user?.id,
+        organization,
+        investor_type: investorType,
+        comments,
+        status: "pending",
+        referral_code: referralCode || null,
+      })
+
+      if (requestError) {
+        toast({
+          title: "Access request failed",
+          description: requestError.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      toast({
+        title: "Registration successful",
+        description: "Your access request has been submitted and is pending approval.",
+      })
+
       router.push("/login")
-    } else {
+    } catch (error) {
       toast({
         title: "Registration failed",
-        description: result.message,
+        description: "An unexpected error occurred",
         variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -94,6 +146,7 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
               </div>
@@ -107,6 +160,20 @@ export default function RegisterPage() {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-[#503E24] flex items-center">
+                  Password <span className="text-red-500 ml-1">*</span>
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />

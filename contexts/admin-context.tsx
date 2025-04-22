@@ -1,48 +1,55 @@
 "use client"
 
 import type React from "react"
-
 import { createContext, useContext, useEffect, useState } from "react"
 import { useSupabase } from "@/components/supabase-provider"
 
 type AdminContextType = {
   isAdmin: boolean
-  isLoading: boolean
+  loading: boolean
 }
 
 const AdminContext = createContext<AdminContextType>({
   isAdmin: false,
-  isLoading: true,
+  loading: true,
 })
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const { supabase } = useSupabase()
+  const [loading, setLoading] = useState(true)
+  const { supabase, user, loading: userLoading } = useSupabase()
 
   useEffect(() => {
-    async function checkAdminStatus() {
+    const checkAdminStatus = async () => {
+      if (!user) {
+        setIsAdmin(false)
+        setLoading(false)
+        return
+      }
+
       try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
+        const { data, error } = await supabase.from("profiles").select("role").eq("id", user.id).single()
 
-        if (session) {
-          const { data } = await supabase.from("profiles").select("role").eq("id", session.user.id).single()
-
+        if (error) {
+          console.error("Error checking admin status:", error)
+          setIsAdmin(false)
+        } else {
           setIsAdmin(data?.role === "admin")
         }
       } catch (error) {
         console.error("Error checking admin status:", error)
+        setIsAdmin(false)
       } finally {
-        setIsLoading(false)
+        setLoading(false)
       }
     }
 
-    checkAdminStatus()
-  }, [supabase])
+    if (!userLoading) {
+      checkAdminStatus()
+    }
+  }, [user, userLoading, supabase])
 
-  return <AdminContext.Provider value={{ isAdmin, isLoading }}>{children}</AdminContext.Provider>
+  return <AdminContext.Provider value={{ isAdmin, loading }}>{children}</AdminContext.Provider>
 }
 
 export const useAdmin = () => useContext(AdminContext)

@@ -1,28 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { createServerClient } from "@/lib/supabase"
+import { getAccessRequests } from "@/lib/admin-utils"
 import { AccessRequestsTable } from "@/components/admin/access-requests-table"
 
 export default async function AccessRequestsPage() {
-  const supabase = createServerClient()
-
-  // Fetch access requests
-  const { data: accessRequests } = await supabase
-    .from("access_requests")
-    .select("*")
-    .order("created_at", { ascending: false })
+  const requests = await getAccessRequests()
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-[#503E24] font-playfair">Access Requests</h1>
+      <div>
+        <h1 className="text-3xl font-bold text-[#503E24]">Access Requests</h1>
+        <p className="text-[#503E24]/70 mt-1">Manage user access requests to the platform</p>
+      </div>
 
-      <Card className="bg-white border-[#B68D53]/20">
-        <CardHeader>
-          <CardTitle className="text-[#503E24]">Manage Access Requests</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AccessRequestsTable accessRequests={accessRequests || []} />
-        </CardContent>
-      </Card>
+      <AccessRequestsTable requests={requests} />
     </div>
   )
 }

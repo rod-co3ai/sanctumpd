@@ -5,44 +5,24 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
-import { updateAccessRequestStatus } from "@/app/actions/admin-actions"
+import { approveAccessRequest, rejectAccessRequest } from "@/app/actions/admin-actions"
 
-interface AccessRequest {
-  id: string
-  email: string
-  full_name: string
-  phone: string
-  organization: string
-  investor_type: string
-  status: string
-  created_at: string
-}
-
-interface AccessRequestsTableProps {
-  accessRequests: AccessRequest[]
-}
-
-export function AccessRequestsTable({ accessRequests }: AccessRequestsTableProps) {
-  const [requests, setRequests] = useState(accessRequests)
-  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({})
+export function AccessRequestsTable({ requests }: { requests: any[] }) {
+  const [processingId, setProcessingId] = useState<string | null>(null)
   const { toast } = useToast()
 
-  const handleStatusUpdate = async (id: string, status: string) => {
-    setIsLoading((prev) => ({ ...prev, [id]: true }))
-
+  const handleApprove = async (id: string) => {
+    setProcessingId(id)
     try {
-      const result = await updateAccessRequestStatus(id, status)
-
+      const result = await approveAccessRequest(id)
       if (result.success) {
-        setRequests((prev) => prev.map((request) => (request.id === id ? { ...request, status } : request)))
-
         toast({
-          title: "Status updated",
-          description: `Request ${status === "approved" ? "approved" : "rejected"} successfully`,
+          title: "Access request approved",
+          description: "The user has been granted access to the platform",
         })
       } else {
         toast({
-          title: "Update failed",
+          title: "Error",
           description: result.message,
           variant: "destructive",
         })
@@ -54,24 +34,39 @@ export function AccessRequestsTable({ accessRequests }: AccessRequestsTableProps
         variant: "destructive",
       })
     } finally {
-      setIsLoading((prev) => ({ ...prev, [id]: false }))
+      setProcessingId(null)
     }
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "approved":
-        return <Badge className="bg-green-500">Approved</Badge>
-      case "rejected":
-        return <Badge className="bg-red-500">Rejected</Badge>
-      case "pending":
-      default:
-        return <Badge className="bg-yellow-500">Pending</Badge>
+  const handleReject = async (id: string) => {
+    setProcessingId(id)
+    try {
+      const result = await rejectAccessRequest(id)
+      if (result.success) {
+        toast({
+          title: "Access request rejected",
+          description: "The user has been denied access to the platform",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setProcessingId(null)
     }
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
@@ -80,59 +75,57 @@ export function AccessRequestsTable({ accessRequests }: AccessRequestsTableProps
             <TableHead>Organization</TableHead>
             <TableHead>Investor Type</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {requests.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center py-4 text-[#503E24]/70">
+              <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
                 No access requests found
               </TableCell>
             </TableRow>
           ) : (
             requests.map((request) => (
               <TableRow key={request.id}>
-                <TableCell className="font-medium">{request.full_name || "—"}</TableCell>
-                <TableCell>{request.email}</TableCell>
-                <TableCell>{request.organization || "—"}</TableCell>
+                <TableCell className="font-medium">{request.profiles.full_name}</TableCell>
+                <TableCell>{request.profiles.email}</TableCell>
+                <TableCell>{request.organization || "-"}</TableCell>
+                <TableCell>{request.investor_type || "-"}</TableCell>
                 <TableCell>
-                  {request.investor_type
-                    ? request.investor_type.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())
-                    : "—"}
+                  <Badge
+                    variant={
+                      request.status === "pending"
+                        ? "outline"
+                        : request.status === "approved"
+                          ? "default"
+                          : "destructive"
+                    }
+                  >
+                    {request.status}
+                  </Badge>
                 </TableCell>
-                <TableCell>{getStatusBadge(request.status)}</TableCell>
+                <TableCell>{new Date(request.created_at).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  {request.status === "pending" ? (
+                  {request.status === "pending" && (
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
-                        variant="outline"
-                        className="border-green-500 text-green-500 hover:bg-green-50"
-                        onClick={() => handleStatusUpdate(request.id, "approved")}
-                        disabled={isLoading[request.id]}
+                        onClick={() => handleApprove(request.id)}
+                        disabled={processingId === request.id}
                       >
                         Approve
                       </Button>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-red-500 text-red-500 hover:bg-red-50"
-                        onClick={() => handleStatusUpdate(request.id, "rejected")}
-                        disabled={isLoading[request.id]}
+                        onClick={() => handleReject(request.id)}
+                        disabled={processingId === request.id}
                       >
                         Reject
                       </Button>
                     </div>
-                  ) : (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleStatusUpdate(request.id, "pending")}
-                      disabled={isLoading[request.id]}
-                    >
-                      Reset
-                    </Button>
                   )}
                 </TableCell>
               </TableRow>

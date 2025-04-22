@@ -78,38 +78,3 @@
 .font-playfair {
   font-family: var(--font-playfair);
 }
-
-/* Phone Input Styles */
-.PhoneInput {
-  display: flex;
-  align-items: center;
-}
-
-.PhoneInputCountry {
-  display: flex;
-  align-items: center;
-  margin-right: 0.5rem;
-}
-
-.PhoneInputInput {
-  flex: 1;
-  border: none;
-  padding: 0;
-  outline: none;
-  background: transparent;
-}
-
-.PhoneInputCountryIcon {
-  width: 1.5rem;
-  height: 1rem;
-  margin-right: 0.5rem;
-}
-
-.PhoneInputCountrySelectArrow {
-  margin-left: 0.25rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-style: solid;
-  border-color: currentColor transparent transparent;
-  border-width: 0.25rem 0.25rem 0;
-}

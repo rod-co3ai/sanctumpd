@@ -37,6 +37,7 @@ export default function LoginPage() {
           description: error.message,
           variant: "destructive",
         })
+        setIsLoading(false)
         return
       }
 
@@ -44,17 +45,13 @@ export default function LoginPage() {
         title: "Login successful",
         description: "Welcome to the Sanctum Investment Portal",
       })
-
-      // Explicitly navigate to dashboard
       router.push("/dashboard")
-      router.refresh()
     } catch (error) {
       toast({
         title: "Login failed",
         description: "An unexpected error occurred",
         variant: "destructive",
       })
-    } finally {
       setIsLoading(false)
     }
   }

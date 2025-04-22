@@ -1,29 +1,36 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { createAdminUser } from "@/app/actions/create-admin-user"
 
 export default function CreateAdminPage() {
+  const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState<{ success: boolean; message: string; userId?: string } | null>(null)
   const { toast } = useToast()
 
-  async function handleSubmit(formData: FormData) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setIsLoading(true)
+
+    const formData = new FormData()
+    formData.append("email", email)
+
     try {
       const result = await createAdminUser(formData)
-      setResult(result)
 
       if (result.success) {
         toast({
           title: "Success",
-          description: "Admin user created successfully",
+          description: result.message,
         })
+        setEmail("")
       } else {
         toast({
           title: "Error",
@@ -43,38 +50,38 @@ export default function CreateAdminPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="max-w-md mx-auto">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-[#503E24]">Create Admin User</h1>
+        <p className="text-[#503E24]/70 mt-1">Grant admin privileges to an existing user</p>
+      </div>
+
+      <Card className="max-w-md">
         <CardHeader>
-          <CardTitle>Create Admin User</CardTitle>
-          <CardDescription>Create a new user with admin privileges</CardDescription>
+          <CardTitle className="text-[#503E24]">Add Admin User</CardTitle>
+          <CardDescription>Enter the email of an existing user to grant them admin privileges</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" defaultValue="rodwilson77@gmail.com" required />
+              <Label htmlFor="email" className="text-[#503E24]">
+                User Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="border-[#B68D53]/20"
+              />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password (optional)</Label>
-              <Input id="password" name="password" type="password" placeholder="Leave blank for random password" />
-              <p className="text-sm text-muted-foreground">If left blank, a random password will be generated</p>
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Creating..." : "Create Admin User"}
+            <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
+              {isLoading ? "Processing..." : "Grant Admin Access"}
             </Button>
           </form>
         </CardContent>
-        {result && (
-          <CardFooter className={`bg-${result.success ? "green" : "red"}-50 p-4 text-sm rounded-b-lg`}>
-            <div>
-              <p className={`font-medium ${result.success ? "text-green-600" : "text-red-600"}`}>
-                {result.success ? "Success" : "Error"}
-              </p>
-              <p className="mt-1">{result.message}</p>
-            </div>
-          </CardFooter>
-        )}
       </Card>
     </div>
   )
