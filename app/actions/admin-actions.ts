@@ -4,7 +4,7 @@ import { createServerClient } from "@/lib/supabase"
 import { isUserAdmin } from "@/lib/admin-utils"
 import { revalidatePath } from "next/cache"
 
-export async function approveAccessRequest(requestId: string) {
+export async function approveAccessRequest(requestId: string, email: string) {
   const supabase = createServerClient()
 
   // Get the current user
@@ -25,7 +25,7 @@ export async function approveAccessRequest(requestId: string) {
   // Get the access request
   const { data: request, error: requestError } = await supabase
     .from("access_requests")
-    .select("user_id, status")
+    .select("status")
     .eq("id", requestId)
     .single()
 
@@ -40,18 +40,31 @@ export async function approveAccessRequest(requestId: string) {
   // Update the access request status
   const { error: updateError } = await supabase
     .from("access_requests")
-    .update({ status: "approved" })
+    .update({ status: "approved", updated_at: new Date().toISOString() })
     .eq("id", requestId)
 
   if (updateError) {
     return { success: false, message: "Failed to update access request" }
   }
 
+  // Find the user by email from auth
+  const { data: authUser, error: authError } = await supabase.auth.admin.listUsers()
+
+  if (authError) {
+    return { success: false, message: "Failed to find user" }
+  }
+
+  const user = authUser.users.find((u) => u.email === email)
+
+  if (!user) {
+    return { success: false, message: "User not found" }
+  }
+
   // Update the user's profile to set access_granted to true
   const { error: profileError } = await supabase
     .from("profiles")
-    .update({ access_granted: true })
-    .eq("id", request.user_id)
+    .update({ access_granted: true, updated_at: new Date().toISOString() })
+    .eq("id", user.id)
 
   if (profileError) {
     return { success: false, message: "Failed to update user profile" }
@@ -98,7 +111,7 @@ export async function rejectAccessRequest(requestId: string) {
   // Update the access request status
   const { error: updateError } = await supabase
     .from("access_requests")
-    .update({ status: "rejected" })
+    .update({ status: "rejected", updated_at: new Date().toISOString() })
     .eq("id", requestId)
 
   if (updateError) {
@@ -129,7 +142,10 @@ export async function setAdminRole(userId: string) {
   }
 
   // Update the user's profile to set role to admin
-  const { error } = await supabase.from("profiles").update({ role: "admin" }).eq("id", userId)
+  const { error } = await supabase
+    .from("profiles")
+    .update({ role: "admin", updated_at: new Date().toISOString() })
+    .eq("id", userId)
 
   if (error) {
     return { success: false, message: "Failed to update user role" }

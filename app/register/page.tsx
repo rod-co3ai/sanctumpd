@@ -57,18 +57,32 @@ export default function RegisterPage() {
         return
       }
 
-      // Create profile
+      if (!authData.user) {
+        toast({
+          title: "Registration failed",
+          description: "User creation failed",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+        return
+      }
+
+      // Create profile - Include email field to match Auth Users
       const { error: profileError } = await supabase.from("profiles").upsert({
-        id: authData.user?.id,
-        email,
+        id: authData.user.id,
+        email: email, // Include email field
         full_name: name,
         phone,
         organization,
+        investor_type: investorType,
         access_granted: false,
         role: "user",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       })
 
       if (profileError) {
+        console.error("Profile creation error:", profileError)
         toast({
           title: "Profile creation failed",
           description: profileError.message,
@@ -80,12 +94,16 @@ export default function RegisterPage() {
 
       // Create access request
       const { error: requestError } = await supabase.from("access_requests").insert({
-        user_id: authData.user?.id,
+        email,
+        full_name: name,
         organization,
+        phone,
         investor_type: investorType,
         comments,
         status: "pending",
         referral_code: referralCode || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       })
 
       if (requestError) {
@@ -105,6 +123,7 @@ export default function RegisterPage() {
 
       router.push("/login")
     } catch (error) {
+      console.error("Registration error:", error)
       toast({
         title: "Registration failed",
         description: "An unexpected error occurred",

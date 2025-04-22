@@ -11,10 +11,10 @@ export function AccessRequestsTable({ requests }: { requests: any[] }) {
   const [processingId, setProcessingId] = useState<string | null>(null)
   const { toast } = useToast()
 
-  const handleApprove = async (id: string) => {
+  const handleApprove = async (id: string, email: string) => {
     setProcessingId(id)
     try {
-      const result = await approveAccessRequest(id)
+      const result = await approveAccessRequest(id, email)
       if (result.success) {
         toast({
           title: "Access request approved",
@@ -89,8 +89,8 @@ export function AccessRequestsTable({ requests }: { requests: any[] }) {
           ) : (
             requests.map((request) => (
               <TableRow key={request.id}>
-                <TableCell className="font-medium">{request.profiles.full_name}</TableCell>
-                <TableCell>{request.profiles.email}</TableCell>
+                <TableCell className="font-medium">{request.full_name}</TableCell>
+                <TableCell>{request.email}</TableCell>
                 <TableCell>{request.organization || "-"}</TableCell>
                 <TableCell>{request.investor_type || "-"}</TableCell>
                 <TableCell>
@@ -112,7 +112,7 @@ export function AccessRequestsTable({ requests }: { requests: any[] }) {
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
-                        onClick={() => handleApprove(request.id)}
+                        onClick={() => handleApprove(request.id, request.email)}
                         disabled={processingId === request.id}
                       >
                         Approve
