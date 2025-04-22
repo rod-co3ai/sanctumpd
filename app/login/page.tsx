@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
-import { useSupabase } from "@/components/supabase-provider"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -19,41 +18,20 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const { supabase } = useSupabase()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        toast({
-          title: "Login failed",
-          description: error.message,
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-
+    // Simulate authentication
+    setTimeout(() => {
+      setIsLoading(false)
       toast({
         title: "Login successful",
         description: "Welcome to the Sanctum Investment Portal",
       })
       router.push("/dashboard")
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      })
-      setIsLoading(false)
-    }
+    }, 1500)
   }
 
   return (

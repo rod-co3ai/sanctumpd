@@ -13,20 +13,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { SanctumPhoneInput } from "@/components/phone-input"
-import { useSupabase } from "@/components/supabase-provider"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [phone, setPhone] = useState("")
+  const [phone, setPhone] = useState("+1 ")
   const [organization, setOrganization] = useState("")
   const [comments, setComments] = useState("")
   const [investorType, setInvestorType] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const { supabase } = useSupabase()
 
   const searchParams = useSearchParams()
   const referralCode = searchParams.get("ref")
@@ -35,103 +32,18 @@ export default function RegisterPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    try {
-      // Register the user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name,
-          },
-        },
-      })
-
-      if (authError) {
-        toast({
-          title: "Registration failed",
-          description: authError.message,
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-
-      if (!authData.user) {
-        toast({
-          title: "Registration failed",
-          description: "User creation failed",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-
-      // Create profile - Include email field to match Auth Users
-      const { error: profileError } = await supabase.from("profiles").upsert({
-        id: authData.user.id,
-        email: email, // Include email field
-        full_name: name,
-        phone,
-        organization,
-        investor_type: investorType,
-        access_granted: false,
-        role: "user",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-
-      if (profileError) {
-        console.error("Profile creation error:", profileError)
-        toast({
-          title: "Profile creation failed",
-          description: profileError.message,
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-
-      // Create access request
-      const { error: requestError } = await supabase.from("access_requests").insert({
-        email,
-        full_name: name,
-        organization,
-        phone,
-        investor_type: investorType,
-        comments,
-        status: "pending",
-        referral_code: referralCode || null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-
-      if (requestError) {
-        toast({
-          title: "Access request failed",
-          description: requestError.message,
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
-      }
-
-      toast({
-        title: "Registration successful",
-        description: "Your access request has been submitted and is pending approval.",
-      })
-
-      router.push("/login")
-    } catch (error) {
-      console.error("Registration error:", error)
-      toast({
-        title: "Registration failed",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      })
-    } finally {
+    // In a real application, you would save the user data along with the referral code
+    // For demonstration purposes, we'll just show a toast with the referral information
+    setTimeout(() => {
       setIsLoading(false)
-    }
+      toast({
+        title: "Registration request submitted",
+        description: referralCode
+          ? `Our team will contact you shortly. Referral: ${referralCode}`
+          : "Our team will contact you shortly to verify your details.",
+      })
+      router.push("/login")
+    }, 1500)
   }
 
   return (
@@ -165,7 +77,6 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
               </div>
@@ -179,20 +90,6 @@ export default function RegisterPage() {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-[#503E24] flex items-center">
-                  Password <span className="text-red-500 ml-1">*</span>
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
