@@ -3,6 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useSupabase } from "@/components/supabase-provider"
+import { checkUserIsAdmin } from "@/lib/api-utils"
 
 type AdminContextType = {
   isAdmin: boolean
@@ -20,32 +21,39 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const { supabase, user, loading: userLoading } = useSupabase()
 
   useEffect(() => {
+    let isMounted = true
+
     const checkAdminStatus = async () => {
       if (!user) {
-        setIsAdmin(false)
-        setLoading(false)
+        if (isMounted) {
+          setIsAdmin(false)
+          setLoading(false)
+        }
         return
       }
 
       try {
-        const { data, error } = await supabase.from("profiles").select("role").eq("id", user.id).single()
+        const adminStatus = await checkUserIsAdmin(supabase, user.id)
 
-        if (error) {
-          console.error("Error checking admin status:", error)
-          setIsAdmin(false)
-        } else {
-          setIsAdmin(data?.role === "admin")
+        if (isMounted) {
+          setIsAdmin(adminStatus)
+          setLoading(false)
         }
       } catch (error) {
-        console.error("Error checking admin status:", error)
-        setIsAdmin(false)
-      } finally {
-        setLoading(false)
+        console.error("Error in admin context:", error)
+        if (isMounted) {
+          setIsAdmin(false)
+          setLoading(false)
+        }
       }
     }
 
     if (!userLoading) {
       checkAdminStatus()
+    }
+
+    return () => {
+      isMounted = false
     }
   }, [user, userLoading, supabase])
 

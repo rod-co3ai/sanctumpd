@@ -25,8 +25,8 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMobile } from "@/hooks/use-mobile"
-import { useAdmin } from "@/contexts/admin-context"
 import { useSupabase } from "@/components/supabase-provider"
+import { useAdmin } from "@/contexts/admin-context"
 
 interface NavItemProps {
   href: string
@@ -58,8 +58,8 @@ export function DashboardNav() {
   const isMobile = useMobile()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const { isAdmin } = useAdmin()
   const { supabase } = useSupabase()
+  const { isAdmin, loading: isAdminLoading } = useAdmin()
 
   useEffect(() => {
     setMounted(true)
@@ -114,7 +114,7 @@ export function DashboardNav() {
             />
           ))}
 
-          {isAdmin && (
+          {!isAdminLoading && isAdmin && (
             <NavItem
               href="/admin"
               icon={<Settings className="h-5 w-5" />}
