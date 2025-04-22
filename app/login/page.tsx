@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
+import { useSupabase } from "@/components/supabase-provider"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -18,20 +19,36 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { supabase } = useSupabase()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate authentication
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) throw error
+
       toast({
         title: "Login successful",
         description: "Welcome to the Sanctum Investment Portal",
       })
+
       router.push("/dashboard")
-    }, 1500)
+      router.refresh()
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message || "Please check your credentials and try again",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -75,7 +92,7 @@ export default function LoginPage() {
                   <Label htmlFor="password" className="text-[#503E24]">
                     Password
                   </Label>
-                  <Link href="#" className="text-sm text-[#B68D53] hover:underline">
+                  <Link href="/forgot-password" className="text-sm text-[#B68D53] hover:underline">
                     Forgot password?
                   </Link>
                 </div>

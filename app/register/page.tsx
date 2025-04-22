@@ -13,37 +13,99 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { SanctumPhoneInput } from "@/components/phone-input"
+import { useSupabase } from "@/components/supabase-provider"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [phone, setPhone] = useState("+1 ")
   const [organization, setOrganization] = useState("")
   const [comments, setComments] = useState("")
   const [investorType, setInvestorType] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [passwordError, setPasswordError] = useState("")
   const router = useRouter()
   const { toast } = useToast()
+  const { supabase } = useSupabase()
 
   const searchParams = useSearchParams()
   const referralCode = searchParams.get("ref")
 
+  const validatePassword = () => {
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match")
+      return false
+    }
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters")
+      return false
+    }
+    setPasswordError("")
+    return true
+  }
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!validatePassword()) return
+
     setIsLoading(true)
 
-    // In a real application, you would save the user data along with the referral code
-    // For demonstration purposes, we'll just show a toast with the referral information
-    setTimeout(() => {
-      setIsLoading(false)
-      toast({
-        title: "Registration request submitted",
-        description: referralCode
-          ? `Our team will contact you shortly. Referral: ${referralCode}`
-          : "Our team will contact you shortly to verify your details.",
+    try {
+      // 1. Register the user with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+          },
+        },
       })
-      router.push("/login")
-    }, 1500)
+
+      if (authError) throw authError
+
+      // 2. Create a profile record
+      const { error: profileError } = await supabase.from("profiles").insert({
+        id: authData.user!.id,
+        full_name: name,
+        email,
+        organization,
+        phone,
+        investor_type: investorType,
+        access_granted: false, // Default to not granted
+        role: "user", // Default role
+        created_at: new Date().toISOString(),
+      })
+
+      if (profileError) throw profileError
+
+      // 3. Create an access request
+      const { error: requestError } = await supabase.from("access_requests").insert({
+        user_id: authData.user!.id,
+        status: "pending",
+        created_at: new Date().toISOString(),
+      })
+
+      if (requestError) throw requestError
+
+      toast({
+        title: "Registration successful",
+        description: "Your access request has been submitted. You will be notified once approved.",
+      })
+
+      router.push("/pending-approval")
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message || "An error occurred during registration",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -77,6 +139,7 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
               </div>
@@ -93,6 +156,35 @@ export default function RegisterPage() {
                   required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-[#503E24]">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-[#503E24]">
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
+                />
+                {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-[#503E24]">
