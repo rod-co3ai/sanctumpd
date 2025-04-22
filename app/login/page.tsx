@@ -5,13 +5,14 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
-import { useSupabase } from "@/components/supabase-provider"
+import { useAuth } from "@/components/auth-provider"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -19,7 +20,14 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const { supabase } = useSupabase()
+  const supabase = createClientComponentClient()
+  const { user } = useAuth()
+
+  // If user is already logged in, redirect to dashboard
+  if (user) {
+    router.push("/dashboard")
+    return null
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,12 +46,11 @@ export default function LoginPage() {
         description: "Welcome to the Sanctum Investment Portal",
       })
 
-      router.push("/dashboard")
-      router.refresh()
+      // The redirection will be handled by the auth state change listener in AuthProvider
     } catch (error: any) {
       toast({
         title: "Login failed",
-        description: error.message || "Please check your credentials and try again",
+        description: error.message || "An error occurred during login",
         variant: "destructive",
       })
     } finally {
@@ -113,7 +120,7 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-[#503E24]/70 text-center">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
               <Link href="/register" className="text-[#B68D53] hover:underline">
                 Request access
               </Link>
