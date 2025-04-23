@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
-import { useAuth } from "@/contexts/auth-context"
+import { getSupabaseClient } from "@/lib/supabase"
 
 // Import the Eye and EyeOff icons at the top of the file
 import { Eye, EyeOff } from "lucide-react"
@@ -20,45 +19,69 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
   const { toast } = useToast()
-  const { signIn, user } = useAuth()
 
   // Add a state for password visibility
   const [showPassword, setShowPassword] = useState(false)
 
-  // Redirect if already logged in
+  // Check for existing session on mount
   useEffect(() => {
-    if (user) {
-      router.push("/dashboard")
+    const checkSession = async () => {
+      try {
+        const supabase = getSupabaseClient()
+        const { data } = await supabase.auth.getSession()
+        if (data.session) {
+          console.log("Existing session found, redirecting")
+          window.location.href = "/dashboard"
+        }
+      } catch (error) {
+        console.error("Session check error:", error)
+      }
     }
-  }, [user, router])
+
+    checkSession()
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    console.log("Login attempt started")
 
     try {
-      const result = await signIn(email, password)
+      // Direct Supabase authentication without going through context
+      const supabase = getSupabaseClient()
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-      if (result.success) {
-        toast({
-          title: "Login successful",
-          description: "Welcome to the Sanctum Investment Portal",
-        })
+      console.log("Auth response:", data ? "success" : "failed", error)
 
-        // Use window.location for a hard navigation instead of router.push
-        window.location.href = "/dashboard"
-      } else {
+      if (error) {
+        console.error("Sign in error:", error.message)
         toast({
           title: "Login failed",
-          description: result.error || "Invalid email or password",
+          description: error.message || "Invalid email or password",
           variant: "destructive",
         })
         setIsLoading(false)
+        return
       }
+
+      // Success - show toast and redirect
+      console.log("Login successful, redirecting")
+      toast({
+        title: "Login successful",
+        description: "Welcome to the Sanctum Investment Portal",
+      })
+
+      // Use a timeout to ensure the toast is shown before redirect
+      setTimeout(() => {
+        console.log("Executing redirect")
+        window.location.href = "/dashboard"
+      }, 1000)
     } catch (error) {
-      console.error("Login error:", error)
+      console.error("Unexpected login error:", error)
       toast({
         title: "Login failed",
         description: "An unexpected error occurred. Please try again.",
@@ -136,6 +159,17 @@ export default function LoginPage() {
               <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
+
+              {/* Add a manual redirect button for testing */}
+              {isLoading && (
+                <Button
+                  type="button"
+                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => (window.location.href = "/dashboard")}
+                >
+                  Go to Dashboard Manually
+                </Button>
+              )}
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
