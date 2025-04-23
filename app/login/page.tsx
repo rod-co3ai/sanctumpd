@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { useAuth } from "@/contexts/auth-context"
+import { getSupabaseClient } from "@/lib/supabase"
 
 // Import the Eye and EyeOff icons at the top of the file
 import { Eye, EyeOff } from "lucide-react"
@@ -34,6 +35,19 @@ export default function LoginPage() {
     }
   }, [user, router])
 
+  // Check for existing session on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const supabase = getSupabaseClient()
+      const { data } = await supabase.auth.getSession()
+      if (data.session) {
+        router.push("/dashboard")
+      }
+    }
+
+    checkSession()
+  }, [router])
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -50,10 +64,11 @@ export default function LoginPage() {
         // Add a small delay before navigation to ensure the session is properly set
         setTimeout(() => {
           router.push("/dashboard")
-          // Force a hard navigation if the router.push doesn't work
+
+          // Force a hard navigation if the router.push doesn't work after a delay
           setTimeout(() => {
             window.location.href = "/dashboard"
-          }, 1000)
+          }, 2000)
         }, 500)
       } else {
         toast({

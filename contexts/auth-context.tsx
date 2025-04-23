@@ -37,37 +37,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initializeAuth = async () => {
       setIsLoading(true)
 
-      // Get session from storage
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-      setSession(session)
+      try {
+        // Get session from storage
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession()
 
-      if (session?.user) {
-        // Fetch user role from profiles
-        const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single()
-
-        const userWithRole = {
-          ...session.user,
-          role: profile?.role || "standard",
+        if (sessionError) {
+          console.error("Error getting session:", sessionError.message)
+          setIsLoading(false)
+          return
         }
 
-        setUser(userWithRole)
-        setIsAdmin(profile?.role === "admin")
-      } else {
-        setUser(null)
-        setIsAdmin(false)
-      }
-
-      // Set up auth state listener
-      const {
-        data: { subscription },
-      } = await supabase.auth.onAuthStateChange(async (_event, session) => {
         setSession(session)
 
         if (session?.user) {
           // Fetch user role from profiles
-          const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single()
+          const { data: profile, error: profileError } = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", session.user.id)
+            .single()
+
+          if (profileError && profileError.code !== "PGRST116") {
+            console.error("Error fetching profile:", profileError.message)
+          }
 
           const userWithRole = {
             ...session.user,
@@ -81,14 +76,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setIsAdmin(false)
         }
 
+        // Set up auth state listener
+        const {
+          data: { subscription },
+        } = await supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log("Auth state changed:", event)
+          setSession(session)
+
+          if (session?.user) {
+            // Fetch user role from profiles
+            const { data: profile, error: profileError } = await supabase
+              .from("profiles")
+              .select("role")
+              .eq("id", session.user.id)
+              .single()
+
+            if (profileError && profileError.code !== "PGRST116") {
+              console.error("Error fetching profile:", profileError.message)
+            }
+
+            const userWithRole = {
+              ...session.user,
+              role: profile?.role || "standard",
+            }
+
+            setUser(userWithRole)
+            setIsAdmin(profile?.role === "admin")
+          } else {
+            setUser(null)
+            setIsAdmin(false)
+          }
+
+          setIsLoading(false)
+        })
+
+        // Cleanup subscription
+        return () => {
+          subscription.unsubscribe()
+        }
+      } catch (error) {
+        console.error("Unexpected error in auth initialization:", error)
         setIsLoading(false)
-      })
-
-      setIsLoading(false)
-
-      // Cleanup subscription
-      return () => {
-        subscription.unsubscribe()
       }
     }
 
@@ -103,8 +131,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
 
       if (error) {
+        console.error("Sign in error:", error.message)
         return { success: false, error: error.message }
       }
+
+      // Force a session refresh to ensure it's properly stored
+      await supabase.auth.refreshSession()
 
       return { success: true }
     } catch (error) {
@@ -114,7 +146,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error("Sign out error:", error.message)
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign out:", error)
+    }
   }
 
   return (

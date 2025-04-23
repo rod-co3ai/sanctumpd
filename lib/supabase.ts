@@ -13,7 +13,27 @@ export function getSupabaseClient() {
     throw new Error("Missing Supabase environment variables")
   }
 
-  clientSingleton = createClient(supabaseUrl, supabaseAnonKey)
+  clientSingleton = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      storageKey: "sanctum-auth-token",
+      detectSessionInUrl: true,
+      flowType: "implicit",
+    },
+    global: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+    cookies: {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      domain: process.env.NODE_ENV === "production" ? undefined : undefined,
+      path: "/",
+    },
+  })
+
   return clientSingleton
 }
 
