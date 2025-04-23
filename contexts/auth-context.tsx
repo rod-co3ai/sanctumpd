@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { Session, User } from "@supabase/supabase-js"
-import { getSupabaseClient } from "@/lib/supabase"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 type UserWithRole = User & {
   role?: string
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
-  const supabase = getSupabaseClient()
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
     // Get initial session
@@ -60,6 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .eq("id", session.user.id)
             .single()
 
+          console.log("Profile data for role:", profile, "Error:", profileError)
+
           if (profileError && profileError.code !== "PGRST116") {
             console.error("Error fetching profile:", profileError.message)
           }
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           setUser(userWithRole)
           setIsAdmin(profile?.role === "admin")
+          console.log("User role set to:", profile?.role, "isAdmin:", profile?.role === "admin")
         } else {
           setUser(null)
           setIsAdmin(false)
@@ -91,6 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               .eq("id", session.user.id)
               .single()
 
+            console.log("Profile data on auth change:", profile, "Error:", profileError)
+
             if (profileError && profileError.code !== "PGRST116") {
               console.error("Error fetching profile:", profileError.message)
             }
@@ -102,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             setUser(userWithRole)
             setIsAdmin(profile?.role === "admin")
+            console.log("User role updated to:", profile?.role, "isAdmin:", profile?.role === "admin")
           } else {
             setUser(null)
             setIsAdmin(false)
@@ -109,6 +115,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           setIsLoading(false)
         })
+
+        setIsLoading(false)
 
         // Cleanup subscription
         return () => {
@@ -134,9 +142,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error("Sign in error:", error.message)
         return { success: false, error: error.message }
       }
-
-      // Force a session refresh to ensure it's properly stored
-      await supabase.auth.refreshSession()
 
       return { success: true }
     } catch (error) {

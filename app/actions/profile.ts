@@ -14,10 +14,12 @@ export type ProfileData = {
   referral_code: string | null
   created_at: string
   updated_at: string
+  role?: string
 }
 
 export async function getProfile(userId: string) {
   try {
+    console.log("Getting profile for user:", userId)
     const supabase = getSupabaseAdmin()
 
     // First, check if profile exists
@@ -28,6 +30,7 @@ export async function getProfile(userId: string) {
 
       // If the error is that the profile doesn't exist, create one
       if (error.code === "PGRST116") {
+        console.log("Profile not found, creating new profile")
         // Get user data from auth
         const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userId)
 
@@ -46,6 +49,7 @@ export async function getProfile(userId: string) {
             id: userId,
             email: userData.user?.email || "",
             name: userData.user?.user_metadata?.full_name || userData.user?.user_metadata?.name || "",
+            role: "standard", // Default role
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })
@@ -80,6 +84,7 @@ export async function getProfile(userId: string) {
       }
     }
 
+    console.log("Profile found:", data)
     return {
       success: true,
       profile: data as ProfileData,
@@ -97,8 +102,8 @@ export async function updateProfile(userId: string, profileData: Partial<Profile
   try {
     const supabase = getSupabaseAdmin()
 
-    // Remove id, created_at, and updated_at from the update data
-    const { id, created_at, updated_at, ...updateData } = profileData as any
+    // Remove id, created_at, updated_at, and role from the update data
+    const { id, created_at, updated_at, role, ...updateData } = profileData as any
 
     // Add updated_at timestamp
     updateData.updated_at = new Date().toISOString()
