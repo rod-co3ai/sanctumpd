@@ -32,7 +32,8 @@ export default function LoginPage() {
         const { data } = await supabase.auth.getSession()
         if (data.session) {
           console.log("Existing session found, redirecting")
-          window.location.href = "/dashboard"
+          // Add noredirect parameter to break potential redirect loops
+          window.location.href = "/dashboard?noredirect=true"
         }
       } catch (error) {
         console.error("Session check error:", error)
@@ -75,11 +76,8 @@ export default function LoginPage() {
         description: "Welcome to the Sanctum Investment Portal",
       })
 
-      // Use a timeout to ensure the toast is shown before redirect
-      setTimeout(() => {
-        console.log("Executing redirect")
-        window.location.href = "/dashboard"
-      }, 1000)
+      // Add noredirect parameter to break potential redirect loops
+      window.location.href = "/dashboard?noredirect=true"
     } catch (error) {
       console.error("Unexpected login error:", error)
       toast({
@@ -159,17 +157,6 @@ export default function LoginPage() {
               <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
-
-              {/* Add a manual redirect button for testing */}
-              {isLoading && (
-                <Button
-                  type="button"
-                  className="w-full mt-2 bg-green-600 hover:bg-green-700 text-white"
-                  onClick={() => (window.location.href = "/dashboard")}
-                >
-                  Go to Dashboard Manually
-                </Button>
-              )}
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

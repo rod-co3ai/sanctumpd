@@ -6,6 +6,11 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const pathname = req.nextUrl.pathname
 
+  // Break redirect loops - if there's a loop parameter, just continue
+  if (req.nextUrl.searchParams.has("noredirect")) {
+    return res
+  }
+
   try {
     // Create a Supabase client configured to use cookies
     const supabase = createMiddlewareClient({ req, res })
@@ -13,27 +18,12 @@ export async function middleware(req: NextRequest) {
     // Refresh session if expired - required for Server Components
     const {
       data: { session },
-      error,
     } = await supabase.auth.getSession()
 
-    if (error) {
-      console.error("Session error in middleware:", error.message)
-    }
-
-    // For debugging - log the current path and session status
-    console.log(`Middleware: Path=${pathname}, HasSession=${!!session}`)
-
-    // Protected routes
+    // Only protect dashboard routes - don't redirect from login to dashboard automatically
     if (pathname.startsWith("/dashboard") && !session) {
       console.log("No session found, redirecting to login")
       const redirectUrl = new URL("/login", req.url)
-      return NextResponse.redirect(redirectUrl)
-    }
-
-    // If user is signed in and the current path is /login or /register, redirect to /dashboard
-    if ((pathname === "/login" || pathname === "/register") && session) {
-      console.log("Session found, redirecting to dashboard")
-      const redirectUrl = new URL("/dashboard", req.url)
       return NextResponse.redirect(redirectUrl)
     }
 
@@ -46,5 +36,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*"],
 }
