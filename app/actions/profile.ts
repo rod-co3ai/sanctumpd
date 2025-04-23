@@ -20,11 +20,52 @@ export async function getProfile(userId: string) {
   try {
     const supabase = getSupabaseAdmin()
 
-    // Add error handling and timeout
+    // First, check if profile exists
     const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single()
 
     if (error) {
       console.error("Error fetching profile:", error)
+
+      // If the error is that the profile doesn't exist, create one
+      if (error.code === "PGRST116") {
+        // Get user data from auth
+        const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userId)
+
+        if (userError) {
+          console.error("Error fetching user:", userError)
+          return {
+            success: false,
+            message: "Failed to fetch user data",
+          }
+        }
+
+        // Create a new profile
+        const { data: newProfile, error: createError } = await supabase
+          .from("profiles")
+          .insert({
+            id: userId,
+            email: userData.user?.email || "",
+            name: userData.user?.user_metadata?.full_name || userData.user?.user_metadata?.name || "",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .select()
+          .single()
+
+        if (createError) {
+          console.error("Error creating profile:", createError)
+          return {
+            success: false,
+            message: "Failed to create profile",
+          }
+        }
+
+        return {
+          success: true,
+          profile: newProfile as ProfileData,
+        }
+      }
+
       return {
         success: false,
         message: error.message || "Failed to fetch profile",
@@ -58,6 +99,9 @@ export async function updateProfile(userId: string, profileData: Partial<Profile
 
     // Remove id, created_at, and updated_at from the update data
     const { id, created_at, updated_at, ...updateData } = profileData as any
+
+    // Add updated_at timestamp
+    updateData.updated_at = new Date().toISOString()
 
     const { data, error } = await supabase.from("profiles").update(updateData).eq("id", userId).select().single()
 
