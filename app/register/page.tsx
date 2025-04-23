@@ -32,45 +32,18 @@ export default function RegisterPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    try {
-      // Submit access request to our API endpoint
-      const response = await fetch("/api/request-access", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          organization,
-          investorType,
-          comments,
-          referralCode,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to submit access request")
-      }
-
-      toast({
-        title: "Request submitted",
-        description: "Your access request has been submitted. You will be notified once approved.",
-      })
-
-      router.push("/registration-success")
-    } catch (error: any) {
-      toast({
-        title: "Submission failed",
-        description: error.message || "An error occurred during submission",
-        variant: "destructive",
-      })
-    } finally {
+    // In a real application, you would save the user data along with the referral code
+    // For demonstration purposes, we'll just show a toast with the referral information
+    setTimeout(() => {
       setIsLoading(false)
-    }
+      toast({
+        title: "Registration request submitted",
+        description: referralCode
+          ? `Our team will contact you shortly. Referral: ${referralCode}`
+          : "Our team will contact you shortly to verify your details.",
+      })
+      router.push("/login")
+    }, 1500)
   }
 
   return (
@@ -104,7 +77,6 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
               </div>

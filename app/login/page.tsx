@@ -11,54 +11,27 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
-import { useSupabase } from "@/components/supabase-provider"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
   const router = useRouter()
   const { toast } = useToast()
-  const { supabase, user } = useSupabase()
-
-  // If user is already logged in, redirect to dashboard
-  if (user) {
-    router.push("/dashboard")
-    return null
-  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        throw error
-      }
-
+    // Simulate authentication
+    setTimeout(() => {
+      setIsLoading(false)
       toast({
         title: "Login successful",
         description: "Welcome to the Sanctum Investment Portal",
       })
-
-      // The redirection will be handled by the auth state change listener in SupabaseProvider
-    } catch (error: any) {
-      setError(error.message || "An error occurred during login")
-      toast({
-        title: "Login failed",
-        description: error.message || "An error occurred during login",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
+      router.push("/dashboard")
+    }, 1500)
   }
 
   return (
@@ -82,7 +55,6 @@ export default function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-[#503E24]">
@@ -103,7 +75,7 @@ export default function LoginPage() {
                   <Label htmlFor="password" className="text-[#503E24]">
                     Password
                   </Label>
-                  <Link href="/forgot-password" className="text-sm text-[#B68D53] hover:underline">
+                  <Link href="#" className="text-sm text-[#B68D53] hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -124,7 +96,7 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-[#503E24]/70 text-center">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link href="/register" className="text-[#B68D53] hover:underline">
                 Request access
               </Link>

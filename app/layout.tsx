@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { Inter, Playfair_Display } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { SupabaseProvider } from "@/components/supabase-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -24,10 +23,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <SupabaseProvider>
-            {children}
-            <Toaster />
-          </SupabaseProvider>
+          {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
