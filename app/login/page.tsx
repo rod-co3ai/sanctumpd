@@ -46,7 +46,15 @@ export default function LoginPage() {
           title: "Login successful",
           description: "Welcome to the Sanctum Investment Portal",
         })
-        router.push("/dashboard")
+
+        // Add a small delay before navigation to ensure the session is properly set
+        setTimeout(() => {
+          router.push("/dashboard")
+          // Force a hard navigation if the router.push doesn't work
+          setTimeout(() => {
+            window.location.href = "/dashboard"
+          }, 1000)
+        }, 500)
       } else {
         toast({
           title: "Login failed",
@@ -65,6 +73,23 @@ export default function LoginPage() {
       setIsLoading(false)
     }
   }
+
+  // Add this useEffect after your existing useEffects
+  useEffect(() => {
+    if (isLoading) {
+      // Reset loading state after 5 seconds if still loading
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+        toast({
+          title: "Navigation issue",
+          description: "Please try refreshing the page or clicking on Dashboard manually.",
+          variant: "destructive",
+        })
+      }, 5000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading, toast])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#F8F5F0] p-4">
