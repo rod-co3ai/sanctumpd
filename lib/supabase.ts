@@ -17,20 +17,6 @@ export function getSupabaseClient() {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      storageKey: "sanctum-auth-token",
-      detectSessionInUrl: true,
-      flowType: "implicit",
-    },
-    global: {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-    cookies: {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      domain: process.env.NODE_ENV === "production" ? undefined : undefined,
-      path: "/",
     },
   })
 
@@ -51,11 +37,6 @@ export function getSupabaseAdmin() {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
-    },
-    global: {
-      headers: {
-        "Content-Type": "application/json",
-      },
     },
   })
 }

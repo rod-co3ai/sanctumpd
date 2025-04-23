@@ -1,174 +1,80 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import Link from "next/link"
+import { useState } from "react"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast"
-import { motion } from "framer-motion"
-import { getSupabaseClient } from "@/lib/supabase"
-
-// Import the Eye and EyeOff icons at the top of the file
-import { Eye, EyeOff } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
 
-  // Add a state for password visibility
-  const [showPassword, setShowPassword] = useState(false)
+  const supabase = createClientComponentClient()
 
-  // Check for existing session on mount
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const supabase = getSupabaseClient()
-        const { data } = await supabase.auth.getSession()
-        if (data.session) {
-          console.log("Existing session found, redirecting")
-          // Add noredirect parameter to break potential redirect loops
-          window.location.href = "/dashboard?noredirect=true"
-        }
-      } catch (error) {
-        console.error("Session check error:", error)
-      }
-    }
-
-    checkSession()
-  }, [])
-
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     setIsLoading(true)
-    console.log("Login attempt started")
+    setError("")
+    setMessage("Signing in...")
 
     try {
-      // Direct Supabase authentication without going through context
-      const supabase = getSupabaseClient()
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      console.log("Auth response:", data ? "success" : "failed", error)
-
       if (error) {
-        console.error("Sign in error:", error.message)
-        toast({
-          title: "Login failed",
-          description: error.message || "Invalid email or password",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-        return
+        setError(error.message)
+        setMessage("")
+      } else {
+        setMessage("Success! Redirecting...")
+        window.location.href = "/dashboard"
       }
-
-      // Success - show toast and redirect
-      console.log("Login successful, redirecting")
-      toast({
-        title: "Login successful",
-        description: "Welcome to the Sanctum Investment Portal",
-      })
-
-      // Add noredirect parameter to break potential redirect loops
-      window.location.href = "/dashboard?noredirect=true"
-    } catch (error) {
-      console.error("Unexpected login error:", error)
-      toast({
-        title: "Login failed",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      })
+    } catch (err) {
+      setError("An unexpected error occurred")
+      console.error(err)
+    } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#F8F5F0] p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <Card className="border-[#B68D53]/20 shadow-lg">
-          <CardHeader className="space-y-1">
-            <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 bg-[#B68D53] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
-              </div>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center">Sanctum Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
-            <CardTitle className="text-2xl font-bold text-center text-[#503E24]">Investor Portal</CardTitle>
-            <CardDescription className="text-center text-[#503E24]/70">
-              Enter your credentials to access the Sanctum investment opportunity
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-[#503E24]">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
-                />
-              </div>
-              {/* Update the password input field to include the toggle button */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-[#503E24]">
-                    Password
-                  </Label>
-                  <Link href="#" className="text-sm text-[#B68D53] hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53] pr-10"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#503E24]/60 hover:text-[#503E24]"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-              <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
-                {isLoading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-[#503E24]/70 text-center">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-[#B68D53] hover:underline">
-                Request access
-              </Link>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
-          </CardFooter>
-        </Card>
-      </motion.div>
+
+            {error && <div className="text-red-500 text-sm">{error}</div>}
+            {message && <div className="text-blue-500 text-sm">{message}</div>}
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Processing..." : "Sign In"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
