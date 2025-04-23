@@ -4,8 +4,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { motion } from "framer-motion"
-import { BarChart, DollarSign, LineChart, PieChart, TrendingUp } from "lucide-react"
+import { BarChartIcon as BarIcon, DollarSign, LineChartIcon as LineIcon, PieChart, TrendingUp } from "lucide-react"
 import { useState } from "react"
+// Add these imports at the top of the file if they don't already exist
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+} from "recharts"
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 
 export default function FinancialsPage() {
   const container = {
@@ -188,11 +202,11 @@ export default function FinancialsPage() {
               Revenue Streams
             </TabsTrigger>
             <TabsTrigger value="projections">
-              <LineChart className="h-4 w-4 mr-2" />
+              <LineIcon className="h-4 w-4 mr-2" />
               10-Year Projections
             </TabsTrigger>
             <TabsTrigger value="returns">
-              <BarChart className="h-4 w-4 mr-2" />
+              <BarIcon className="h-4 w-4 mr-2" />
               Investor Returns
             </TabsTrigger>
           </TabsList>
@@ -341,86 +355,121 @@ export default function FinancialsPage() {
                   </div>
                 </div>
 
-                <div className="relative h-96 bg-[#F8F5F0]/50 rounded-lg p-6 border border-[#B68D53]/20">
-                  {/* Y-axis labels */}
-                  <div className="absolute left-0 top-6 bottom-10 w-16 flex flex-col justify-between items-end pr-2 pointer-events-none">
-                    {Array.from({ length: 6 }).map((_, i) => {
-                      const value = (maxValue / 5) * (5 - i)
-                      return (
-                        <div key={i} className="text-xs font-medium text-[#503E24]/70">
-                          ${value.toFixed(1)}M
-                        </div>
-                      )
-                    })}
-                  </div>
-
-                  {/* Horizontal grid lines */}
-                  <div className="absolute left-16 right-6 top-6 bottom-10 flex flex-col justify-between pointer-events-none">
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <div key={i} className="w-full h-px bg-[#B68D53]/20" />
-                    ))}
-                  </div>
-
-                  {/* X-axis labels */}
-                  <div className="absolute left-16 right-6 bottom-0 h-10 flex justify-between items-center pointer-events-none">
-                    {yearlyInvestorReturns.map((year, i) => (
-                      <div key={i} className="text-xs font-medium text-[#503E24]/70">
-                        {year.year}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Chart container */}
-                  <div className="absolute left-16 right-6 top-6 bottom-10">
-                    {/* Simple bar chart */}
-                    <div className="relative h-full w-full flex justify-between items-end">
-                      {(viewMode === "yearly" ? yearlyInvestorReturns : cumulativeReturns).map((data, i) => {
-                        const height = (data.return / maxValue) * 100
-                        return (
-                          <div
-                            key={i}
-                            className="group relative flex flex-col items-center"
-                            onMouseEnter={() => setHoveredYear(data.year)}
+                <div className="h-96 bg-[#F8F5F0]/50 rounded-lg p-6 border border-[#B68D53]/20">
+                  <ChartContainer
+                    config={{
+                      yearly: {
+                        label: "Yearly Returns",
+                        color: "hsl(var(--primary))",
+                      },
+                      cumulative: {
+                        label: "Cumulative Returns",
+                        color: "#D4AF37",
+                      },
+                    }}
+                    className="h-full w-full"
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      {viewMode === "yearly" ? (
+                        <BarChart data={yearlyInvestorReturns} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B68D5333" />
+                          <XAxis
+                            dataKey="year"
+                            tick={{ fill: "#503E24", fontSize: 12 }}
+                            axisLine={{ stroke: "#B68D5333" }}
+                            tickLine={{ stroke: "#B68D5333" }}
+                          />
+                          <YAxis
+                            tick={{ fill: "#503E24", fontSize: 12 }}
+                            axisLine={{ stroke: "#B68D5333" }}
+                            tickLine={{ stroke: "#B68D5333" }}
+                            tickFormatter={(value) => `$${value}M`}
+                            domain={[0, 5]}
+                          />
+                          <ChartTooltip
+                            content={({ active, payload, label }) => {
+                              if (active && payload && payload.length) {
+                                return (
+                                  <div className="bg-white p-3 border border-[#B68D53]/20 rounded-md shadow-md">
+                                    <p className="font-medium text-[#503E24]">{label}</p>
+                                    <p className="text-[#B68D53] font-bold">${payload[0].value.toFixed(2)}M</p>
+                                    <p className="text-xs text-[#503E24]/70">{payload[0].payload.phase}</p>
+                                  </div>
+                                )
+                              }
+                              return null
+                            }}
+                          />
+                          <Bar
+                            dataKey="return"
+                            fill="var(--color-yearly)"
+                            radius={[4, 4, 0, 0]}
+                            animationDuration={1500}
+                            onMouseOver={(data) => setHoveredYear(data.year)}
                             onMouseLeave={() => setHoveredYear(null)}
                           >
-                            {/* Simple bar with fixed width */}
-                            <div
-                              className="w-10 bg-[#B68D53] rounded-t-md"
-                              style={{
-                                height: `${height}%`,
-                                backgroundColor: hoveredYear === data.year ? "#D4AF37" : "#B68D53",
-                              }}
-                            />
-
-                            {/* Value label */}
-                            {data.return > 0 && (
-                              <div className="mt-2 text-xs font-medium text-[#503E24]">${data.return.toFixed(1)}M</div>
+                            {yearlyInvestorReturns.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={hoveredYear === entry.year ? "#D4AF37" : "var(--color-yearly)"}
+                              />
+                            ))}
+                          </Bar>
+                          <Legend
+                            verticalAlign="top"
+                            height={36}
+                            formatter={(value) => <span className="text-[#503E24] font-medium">Yearly Returns</span>}
+                          />
+                        </BarChart>
+                      ) : (
+                        <LineChart data={cumulativeReturns} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B68D5333" />
+                          <XAxis
+                            dataKey="year"
+                            tick={{ fill: "#503E24", fontSize: 12 }}
+                            axisLine={{ stroke: "#B68D5333" }}
+                            tickLine={{ stroke: "#B68D5333" }}
+                          />
+                          <YAxis
+                            tick={{ fill: "#503E24", fontSize: 12 }}
+                            axisLine={{ stroke: "#B68D5333" }}
+                            tickLine={{ stroke: "#B68D5333" }}
+                            tickFormatter={(value) => `$${value}M`}
+                          />
+                          <ChartTooltip
+                            content={({ active, payload, label }) => {
+                              if (active && payload && payload.length) {
+                                return (
+                                  <div className="bg-white p-3 border border-[#B68D53]/20 rounded-md shadow-md">
+                                    <p className="font-medium text-[#503E24]">{label}</p>
+                                    <p className="text-[#D4AF37] font-bold">${payload[0].value.toFixed(2)}M</p>
+                                    <p className="text-xs text-[#503E24]/70">{payload[0].payload.phase}</p>
+                                  </div>
+                                )
+                              }
+                              return null
+                            }}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="return"
+                            stroke="var(--color-cumulative)"
+                            strokeWidth={3}
+                            dot={{ fill: "var(--color-cumulative)", r: 4 }}
+                            activeDot={{ r: 6, fill: "#D4AF37" }}
+                            animationDuration={1500}
+                          />
+                          <Legend
+                            verticalAlign="top"
+                            height={36}
+                            formatter={(value) => (
+                              <span className="text-[#503E24] font-medium">Cumulative Returns</span>
                             )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Value labels for yearly view at the bottom */}
-                  <div className="absolute inset-x-0 bottom-[-30px] pointer-events-none flex justify-between items-center">
-                    {yearlyInvestorReturns.map((data, i) => {
-                      if (data.return > 0) {
-                        return (
-                          <motion.div
-                            key={i}
-                            className="text-xs font-medium text-[#503E24] text-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 1 + i * 0.05 }}
-                          >
-                            ${data.return.toFixed(1)}M
-                          </motion.div>
-                        )
-                      }
-                      return <div key={i} className="w-8" />
-                    })}
-                  </div>
+                          />
+                        </LineChart>
+                      )}
+                    </ResponsiveContainer>
+                  </ChartContainer>
                 </div>
 
                 <div className="text-center space-y-2 mt-6">
