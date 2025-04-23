@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -21,10 +21,13 @@ import {
   PieChart,
   Users,
   X,
+  LogOut,
+  User,
 } from "lucide-react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { useMobile } from "@/hooks/use-mobile"
+import { useAuth } from "@/contexts/auth-context"
 
 interface NavItemProps {
   href: string
@@ -56,6 +59,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const isMobile = useMobile()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { signOut } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -75,6 +80,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { href: "/dashboard/expansion", icon: <Globe className="h-5 w-5" />, label: "Global Expansion" },
     { href: "/dashboard/financials", icon: <FileText className="h-5 w-5" />, label: "Financial Projections" },
     { href: "/dashboard/team", icon: <Users className="h-5 w-5" />, label: "Team" },
+    { href: "/dashboard/profile", icon: <User className="h-5 w-5" />, label: "Your Profile" },
   ]
 
   const sidebar = (
@@ -146,6 +152,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 Invite a Colleague
               </Button>
             </Link>
+            <Button
+              variant="outline"
+              className="text-[#503E24] border-[#503E24]/20"
+              onClick={async () => {
+                await signOut()
+                router.push("/login")
+              }}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
+            </Button>
           </div>
         </header>
         <main className="flex-1 overflow-auto">

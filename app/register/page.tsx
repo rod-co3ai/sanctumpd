@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 import { SanctumPhoneInput } from "@/components/phone-input"
+import { submitAccessRequest } from "../actions/register"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
@@ -32,18 +33,42 @@ export default function RegisterPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // In a real application, you would save the user data along with the referral code
-    // For demonstration purposes, we'll just show a toast with the referral information
-    setTimeout(() => {
-      setIsLoading(false)
-      toast({
-        title: "Registration request submitted",
-        description: referralCode
-          ? `Our team will contact you shortly. Referral: ${referralCode}`
-          : "Our team will contact you shortly to verify your details.",
+    try {
+      // Submit the form data to our server action
+      const result = await submitAccessRequest({
+        name,
+        email,
+        phone,
+        organization,
+        investorType,
+        comments,
+        referralCode,
       })
-      router.push("/login")
-    }, 1500)
+
+      if (result.success) {
+        toast({
+          title: "Registration request submitted",
+          description: result.message,
+        })
+        // Redirect to login page after successful submission
+        router.push("/login")
+      } else {
+        toast({
+          title: "Error submitting request",
+          description: result.message,
+          variant: "destructive",
+        })
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error)
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
+    }
   }
 
   return (

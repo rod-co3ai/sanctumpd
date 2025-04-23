@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -11,6 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
+import { useAuth } from "@/contexts/auth-context"
+
+// Import the Eye and EyeOff icons at the top of the file
+import { Eye, EyeOff } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -18,20 +22,48 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const { signIn, user } = useAuth()
+
+  // Add a state for password visibility
+  const [showPassword, setShowPassword] = useState(false)
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard")
+    }
+  }, [user, router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate authentication
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      const result = await signIn(email, password)
+
+      if (result.success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome to the Sanctum Investment Portal",
+        })
+        router.push("/dashboard")
+      } else {
+        toast({
+          title: "Login failed",
+          description: result.error || "Invalid email or password",
+          variant: "destructive",
+        })
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error("Login error:", error)
       toast({
-        title: "Login successful",
-        description: "Welcome to the Sanctum Investment Portal",
+        title: "Login failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
       })
-      router.push("/dashboard")
-    }, 1500)
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -70,6 +102,7 @@ export default function LoginPage() {
                   className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
                 />
               </div>
+              {/* Update the password input field to include the toggle button */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password" className="text-[#503E24]">
@@ -79,15 +112,24 @@ export default function LoginPage() {
                     Forgot password?
                   </Link>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53] pr-10"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#503E24]/60 hover:text-[#503E24]"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </div>
               <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
                 {isLoading ? "Signing in..." : "Sign In"}
