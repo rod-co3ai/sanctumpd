@@ -237,7 +237,10 @@ export default function AdminPage() {
     }
 
     try {
+      setIsProcessing(true)
       const result = await deleteUser(userToDelete.id)
+      setIsProcessing(false)
+
       if (result.success) {
         toast({
           title: "Success",
@@ -249,16 +252,17 @@ export default function AdminPage() {
         setUserToDelete(null)
       } else {
         toast({
-          title: "Error",
-          description: result.message,
+          title: "Error deleting user",
+          description: result.message || "Failed to delete user",
           variant: "destructive",
         })
       }
     } catch (error) {
+      setIsProcessing(false)
       console.error("Error deleting user:", error)
       toast({
         title: "Error",
-        description: "Failed to delete user",
+        description: "An unexpected error occurred while deleting the user",
         variant: "destructive",
       })
     }
@@ -586,10 +590,17 @@ export default function AdminPage() {
                                       </Button>
                                       <Button
                                         onClick={handleDeleteUser}
-                                        disabled={deleteConfirmEmail !== userToDelete?.email}
+                                        disabled={deleteConfirmEmail !== userToDelete?.email || isProcessing}
                                         variant="destructive"
                                       >
-                                        Delete User
+                                        {isProcessing ? (
+                                          <>
+                                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                            Deleting...
+                                          </>
+                                        ) : (
+                                          "Delete User"
+                                        )}
                                       </Button>
                                     </DialogFooter>
                                   </DialogContent>

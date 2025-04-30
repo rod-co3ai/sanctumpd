@@ -260,11 +260,32 @@ export async function deleteUser(userId: string) {
   try {
     const supabase = getSupabaseAdmin()
 
+    // First, delete any related records in the profiles table
+    const { error: profileError } = await supabase.from("profiles").delete().eq("id", userId)
+
+    if (profileError) {
+      console.error("Error deleting user profile:", profileError)
+      return { success: false, message: `Error deleting user profile: ${profileError.message}` }
+    }
+
+    // Check for and delete any access_requests related to this user
+    // This is optional and depends on your data model
+    const { error: requestsError } = await supabase
+      .from("access_requests")
+      .update({ processed_by: null })
+      .eq("processed_by", userId)
+
+    if (requestsError) {
+      console.error("Error updating access requests:", requestsError)
+      // Continue with deletion even if this fails
+    }
+
+    // Finally delete the user from Auth
     const { error } = await supabase.auth.admin.deleteUser(userId)
 
     if (error) {
       console.error("Error deleting user:", error)
-      return { success: false, message: error.message }
+      return { success: false, message: `Error deleting user: ${error.message}` }
     }
 
     revalidatePath("/dashboard/admin")
