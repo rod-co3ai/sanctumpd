@@ -59,8 +59,8 @@ export default function AccessWorkflowPage() {
     <div className="min-h-screen bg-gradient-to-b from-white to-[#F8F5F0]">
       <header className="container mx-auto py-6 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
-          <div className="h-10 w-10 bg-[#B68D53] rounded-full flex items-center justify-center">
-            <span className="text-white font-bold">S</span>
+          <div className="h-10 w-10 flex items-center justify-center">
+            <img src="/sanctum-logo.png" alt="Sanctum" className="h-10 w-10" />
           </div>
           <span className="text-[#503E24] font-bold text-xl">SANCTUM</span>
         </Link>

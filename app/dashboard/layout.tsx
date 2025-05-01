@@ -37,6 +37,7 @@ interface NavItemProps {
   onClick?: () => void
 }
 
+// Update the NavItem component to use the new colors
 function NavItem({ href, icon, label, isActive, onClick }: NavItemProps) {
   return (
     <Link
@@ -44,7 +45,7 @@ function NavItem({ href, icon, label, isActive, onClick }: NavItemProps) {
       onClick={onClick}
       className={cn(
         "flex items-center gap-3 rounded-lg px-3 py-2 transition-all",
-        isActive ? "bg-[#B68D53] text-white" : "text-[#503E24] hover:bg-[#B68D53]/10 hover:text-[#503E24]",
+        isActive ? "bg-sanctum-gold text-white" : "text-white hover:bg-white/10 hover:text-white",
       )}
     >
       {icon}
@@ -84,16 +85,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ]
 
   const sidebar = (
-    <div className="flex h-full flex-col gap-2">
-      <div className="flex h-14 items-center border-b px-4">
+    <div className="flex h-full flex-col gap-2 bg-sanctum-green">
+      <div className="flex h-14 items-center border-b border-white/10 px-4">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <div className="h-8 w-8 bg-[#B68D53] rounded-full flex items-center justify-center">
-            <span className="text-white font-bold">S</span>
+          <div className="h-8 w-8 flex items-center justify-center">
+            <img src="/sanctum-logo.png" alt="Sanctum" className="h-8 w-8" />
           </div>
-          <span className="text-[#503E24]">SANCTUM</span>
+          <span className="text-white">SANCTUM</span>
         </Link>
         {isMobile && (
-          <Button variant="ghost" size="icon" className="ml-auto" onClick={() => setIsSidebarOpen(false)}>
+          <Button variant="ghost" size="icon" className="ml-auto text-white" onClick={() => setIsSidebarOpen(false)}>
             <X className="h-5 w-5" />
           </Button>
         )}
@@ -113,48 +114,49 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </ScrollArea>
       <div className="mt-auto p-4">
-        <div className="rounded-lg bg-[#F8F5F0] p-4">
+        <div className="rounded-lg bg-sanctum-darkgreen p-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-[#503E24]">Need assistance?</span>
+            <span className="text-sm font-medium text-white">Need assistance?</span>
           </div>
-          <div className="text-xs text-[#503E24]/70 mb-3">
+          <div className="text-xs text-white/70 mb-3">
             Contact our investment team for more information or to schedule a call.
           </div>
-          <Button className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white">Contact Us</Button>
+          <Button className="w-full bg-sanctum-gold hover:bg-sanctum-gold/80 text-white">Contact Us</Button>
         </div>
       </div>
     </div>
   )
 
+  // Update the return statement to use the new colors
   return (
-    <div className="flex min-h-screen bg-[#F8F5F0]">
+    <div className="flex min-h-screen bg-sanctum-green text-white">
       {isMobile ? (
         <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="absolute left-4 top-4 z-50 md:hidden">
+            <Button variant="ghost" size="icon" className="absolute left-4 top-4 z-50 md:hidden text-white">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-72">
+          <SheetContent side="left" className="p-0 w-72 bg-sanctum-green border-r-0">
             {sidebar}
           </SheetContent>
         </Sheet>
       ) : (
-        <div className="hidden md:block w-72 border-r bg-white">{sidebar}</div>
+        <div className="hidden md:block w-72 border-r border-white/10 bg-sanctum-green">{sidebar}</div>
       )}
       <div className="flex-1 flex flex-col">
-        <header className="h-14 border-b bg-white flex items-center px-4 md:px-6">
+        <header className="h-14 border-b border-white/10 bg-sanctum-green flex items-center px-4 md:px-6">
           {isMobile && <div className="w-8" />}
-          <div className="font-semibold text-[#503E24]">Sanctum Bali Investment Opportunity</div>
+          <div className="font-semibold text-white">Sanctum Bali Investment Opportunity</div>
           <div className="ml-auto flex items-center gap-4">
             <Link href="/dashboard/invite-colleague">
-              <Button variant="outline" className="text-[#503E24] border-[#503E24]/20">
+              <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
                 Invite a Colleague
               </Button>
             </Link>
             <Button
               variant="outline"
-              className="text-[#503E24] border-[#503E24]/20"
+              className="text-white border-white/20 hover:bg-white/10"
               onClick={async () => {
                 await signOut()
                 router.push("/login")
@@ -165,7 +167,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Button>
           </div>
         </header>
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto bg-sanctum-green">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -81,29 +81,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#F8F5F0] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-sanctum-green p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="border-[#B68D53]/20 shadow-lg">
+        <Card className="border-sanctum-gold/20 shadow-lg bg-sanctum-darkgreen">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 bg-[#B68D53] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">S</span>
+              <div className="h-12 w-12 flex items-center justify-center">
+                <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center text-[#503E24]">Investor Portal</CardTitle>
-            <CardDescription className="text-center text-[#503E24]/70">
+            <CardTitle className="text-2xl font-bold text-center text-white">Investor Portal</CardTitle>
+            <CardDescription className="text-center text-white/70">
               Enter your credentials to access the Sanctum investment opportunity
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-[#503E24]">
+                <Label htmlFor="email" className="text-white">
                   Email
                 </Label>
                 <Input
@@ -113,15 +113,15 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53]"
+                  className="border-sanctum-gold/20 bg-sanctum-green/50 text-white focus:border-sanctum-gold focus:ring-sanctum-gold"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-[#503E24]">
+                  <Label htmlFor="password" className="text-white">
                     Password
                   </Label>
-                  <Link href="#" className="text-sm text-[#B68D53] hover:underline">
+                  <Link href="#" className="text-sm text-sanctum-gold hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -133,26 +133,30 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-[#B68D53]/20 focus:border-[#B68D53] focus:ring-[#B68D53] pr-10"
+                    className="border-sanctum-gold/20 bg-sanctum-green/50 text-white focus:border-sanctum-gold focus:ring-sanctum-gold pr-10"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#503E24]/60 hover:text-[#503E24]"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
-              <Button type="submit" className="w-full bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full bg-sanctum-gold hover:bg-sanctum-gold/80 text-white"
+                disabled={isLoading}
+              >
                 {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-[#503E24]/70 text-center">
+            <div className="text-sm text-white/70 text-center">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-[#B68D53] hover:underline">
+              <Link href="/register" className="text-sanctum-gold hover:underline">
                 Request access
               </Link>
             </div>

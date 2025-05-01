@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
-import { Hexagon } from "lucide-react"
 
 export default function PillarsPage() {
   const container = {
@@ -64,12 +63,7 @@ export default function PillarsPage() {
 
       <motion.div variants={item} className="flex justify-center py-8">
         <div className="relative w-64 h-64">
-          <Hexagon className="w-full h-full text-[#D4AF37]" strokeWidth={1} />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="h-16 w-16 bg-[#D4AF37] rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">S</span>
-            </div>
-          </div>
+          <img src="/sanctum-logo.png" alt="Sanctum" className="w-full h-full" />
         </div>
       </motion.div>
 
