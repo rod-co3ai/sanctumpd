@@ -6,11 +6,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#3B4A3A] to-[#2A362A]">
       <header className="container mx-auto py-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <div className="h-10 w-10 flex items-center justify-center">
-            <img src="/sanctum-logo.png" alt="Sanctum" className="h-10 w-10" />
+        <div className="flex items-center gap-0.5">
+          <div className="h-16 w-16 flex items-center justify-center">
+            <img src="/sanctum-logo.png" alt="Sanctum Logo" className="h-16 w-16" />
           </div>
-          <span className="text-white font-bold text-xl">SANCTUM</span>
+          <div className="h-32 flex items-center">
+            <img src="/sanctum-word-gold.png" alt="SANCTUM" className="h-32" />
+          </div>
         </div>
         <div className="flex gap-4">
           <Link href="/login">
@@ -53,8 +55,8 @@ export default function Home() {
           </div>
           <div className="flex-1 relative h-[400px] w-full rounded-xl overflow-hidden shadow-xl">
             <Image
-              src="/balinese-river-retreat.png"
-              alt="Sanctum Bali"
+              src="/sanctum-bali-resort.jpeg"
+              alt="Sanctum Bali Resort"
               fill
               className="object-cover rounded-xl"
               priority

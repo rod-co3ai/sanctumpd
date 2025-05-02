@@ -86,11 +86,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const sidebar = (
     <div className="flex h-full flex-col gap-2 bg-[#3B4A3A]">
       <div className="flex h-14 items-center border-b border-[#B89068]/20 px-4">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <div className="h-8 w-8 flex items-center justify-center">
-            <img src="/sanctum-logo.png" alt="Sanctum" className="h-8 w-8" />
+        <Link href="/dashboard" className="flex items-center gap-0.5 font-semibold">
+          <div className="h-12 w-12 flex items-center justify-center">
+            <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />
           </div>
-          <span className="text-white">SANCTUM</span>
+          <div className="h-24 flex items-center">
+            <img src="/sanctum-word-gold.png" alt="SANCTUM" className="h-24" />
+          </div>
         </Link>
         {isMobile && (
           <Button
