@@ -130,8 +130,8 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-[50vh] gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-[#B68D53]" />
-        <p className="text-[#503E24]">Loading your profile...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-[#B89068]" />
+        <p className="text-[#E8E0D4]">Loading your profile...</p>
       </div>
     )
   }
@@ -140,28 +140,28 @@ export default function ProfilePage() {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <motion.div variants={item} className="space-y-4">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#503E24] font-playfair">Your Profile</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white font-playfair">Your Profile</h1>
           {isAdmin && (
             <Link href="/dashboard/admin">
-              <Button className="bg-[#B68D53] hover:bg-[#A67D43] text-white">
+              <Button className="bg-[#B89068] hover:bg-[#8D6E4E] text-white">
                 <ShieldCheck className="h-4 w-4 mr-2" />
                 Admin Panel
               </Button>
             </Link>
           )}
         </div>
-        <p className="text-[#503E24]/80 text-lg">View and update your profile information</p>
+        <p className="text-[#E8E0D4] text-lg">View and update your profile information</p>
       </motion.div>
 
       {isAdmin && (
         <motion.div variants={item}>
-          <Card className="border-[#B68D53]/20 bg-amber-50">
+          <Card className="border-[#B89068]/20 bg-[#4C5A4B]">
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="h-6 w-6 text-[#B68D53]" />
+                <ShieldCheck className="h-6 w-6 text-white" />
                 <div>
-                  <h3 className="font-medium text-[#503E24]">Administrator Account</h3>
-                  <p className="text-sm text-[#503E24]/70">
+                  <h3 className="font-medium text-white">Administrator Account</h3>
+                  <p className="text-sm text-[#E8E0D4]/70">
                     You have administrator privileges. Access the admin panel to manage users and access requests.
                   </p>
                 </div>
@@ -172,18 +172,18 @@ export default function ProfilePage() {
       )}
 
       <motion.div variants={item}>
-        <Card className="border-[#B68D53]/20">
+        <Card className="border-[#B89068]/20 bg-[#4C5A4B]">
           <form onSubmit={handleSubmit}>
             <CardHeader>
-              <CardTitle className="text-[#503E24]">Personal Information</CardTitle>
-              <CardDescription className="text-[#503E24]/70">
+              <CardTitle className="text-white">Personal Information</CardTitle>
+              <CardDescription className="text-[#E8E0D4]/70">
                 Update your personal details and preferences
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[#503E24]">
+                  <Label htmlFor="name" className="text-[#E8E0D4]">
                     Full Name
                   </Label>
                   <Input
@@ -192,11 +192,11 @@ export default function ProfilePage() {
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={handleChange}
-                    className="border-[#B68D53]/20"
+                    className="border-[#B89068]/20 bg-[#3B4A3A] text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[#503E24]">
+                  <Label htmlFor="email" className="text-[#E8E0D4]">
                     Email
                   </Label>
                   <Input
@@ -206,11 +206,11 @@ export default function ProfilePage() {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={handleChange}
-                    className="border-[#B68D53]/20"
+                    className="border-[#B89068]/20 bg-[#3B4A3A] text-white"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-[#503E24]">
+                  <Label htmlFor="phone" className="text-[#E8E0D4]">
                     Phone
                   </Label>
                   <SanctumPhoneInput
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="organization" className="text-[#503E24]">
+                  <Label htmlFor="organization" className="text-[#E8E0D4]">
                     Organization
                   </Label>
                   <Input
@@ -228,35 +228,47 @@ export default function ProfilePage() {
                     placeholder="Your organization"
                     value={formData.organization}
                     onChange={handleChange}
-                    className="border-[#B68D53]/20"
+                    className="border-[#B89068]/20 bg-[#3B4A3A] text-white"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="investor_type" className="text-[#503E24]">
+                <Label htmlFor="investor_type" className="text-[#E8E0D4]">
                   Investor Type
                 </Label>
                 <Select
                   value={formData.investor_type}
                   onValueChange={(value) => setFormData((prev) => ({ ...prev, investor_type: value }))}
                 >
-                  <SelectTrigger className="border-[#B68D53]/20">
+                  <SelectTrigger className="border-[#B89068]/20 bg-[#3B4A3A] text-white">
                     <SelectValue placeholder="Select investor type" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="family_office">Family Office</SelectItem>
-                    <SelectItem value="private_equity">Private Equity</SelectItem>
-                    <SelectItem value="venture_capital">Venture Capital</SelectItem>
-                    <SelectItem value="individual">Individual Investor</SelectItem>
-                    <SelectItem value="corporate">Corporate Investor</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                  <SelectContent className="bg-[#3B4A3A] border-[#B89068]/20">
+                    <SelectItem value="family_office" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Family Office
+                    </SelectItem>
+                    <SelectItem value="private_equity" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Private Equity
+                    </SelectItem>
+                    <SelectItem value="venture_capital" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Venture Capital
+                    </SelectItem>
+                    <SelectItem value="individual" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Individual Investor
+                    </SelectItem>
+                    <SelectItem value="corporate" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Corporate Investor
+                    </SelectItem>
+                    <SelectItem value="other" className="text-white focus:bg-[#4C5A4B] focus:text-white">
+                      Other
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="comments" className="text-[#503E24]">
+                <Label htmlFor="comments" className="text-[#E8E0D4]">
                   Additional Information
                 </Label>
                 <textarea
@@ -266,12 +278,12 @@ export default function ProfilePage() {
                   value={formData.comments || ""}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full rounded-md border border-[#B68D53]/20 p-2"
+                  className="w-full rounded-md border border-[#B89068]/20 bg-[#3B4A3A] p-2 text-white"
                 />
               </div>
 
               {profile?.created_at && (
-                <div className="text-sm text-[#503E24]/60">
+                <div className="text-sm text-[#E8E0D4]/60">
                   Account created: {new Date(profile.created_at).toLocaleDateString()}
                 </div>
               )}
@@ -280,7 +292,7 @@ export default function ProfilePage() {
               <Button
                 type="button"
                 variant="outline"
-                className="border-[#B68D53]/20 text-[#503E24]"
+                className="border-white text-white hover:bg-[#B89068]/10"
                 onClick={() => {
                   if (profile) {
                     setFormData({
@@ -296,7 +308,7 @@ export default function ProfilePage() {
               >
                 Reset
               </Button>
-              <Button type="submit" className="bg-[#B68D53] hover:bg-[#A67D43] text-white" disabled={isSaving}>
+              <Button type="submit" className="bg-[#B89068] hover:bg-[#8D6E4E] text-white" disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Changes"}
               </Button>
             </CardFooter>

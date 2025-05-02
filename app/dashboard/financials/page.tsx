@@ -45,11 +45,11 @@ export default function FinancialsPage() {
   ]
 
   const revenueStreams = [
-    { name: "Accommodation", percentage: 40, color: "#B68D53" },
-    { name: "Wellness Services", percentage: 25, color: "#D4AF37" },
-    { name: "Food & Beverage", percentage: 15, color: "#503E24" },
-    { name: "Longevity Treatments", percentage: 12, color: "#8A7250" },
-    { name: "Retail & Other", percentage: 8, color: "#C9B38C" },
+    { name: "Accommodation", percentage: 40, color: "#B89068" },
+    { name: "Wellness Services", percentage: 25, color: "#8D6E4E" },
+    { name: "Food & Beverage", percentage: 15, color: "#4C5A4B" },
+    { name: "Longevity Treatments", percentage: 12, color: "#3B4A3A" },
+    { name: "Retail & Other", percentage: 8, color: "#E8E0D4" },
   ]
 
   const yearlyProjections = [
@@ -107,66 +107,66 @@ export default function FinancialsPage() {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <motion.div variants={item} className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#503E24]">FINANCIAL PROJECTIONS</h1>
-        <p className="text-[#503E24]/80 text-lg">
+        <h1 className="text-3xl md:text-4xl font-bold text-white font-playfair">Financial Projections</h1>
+        <p className="text-[#E8E0D4] text-lg">
           Detailed financial projections and investment structure for Sanctum Bali
         </p>
       </motion.div>
 
       <motion.div variants={item}>
-        <Card className="border-[#B68D53]/20">
+        <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xl font-bold text-[#503E24] mb-4">Investment Overview</h3>
+                <h3 className="text-xl font-bold text-white mb-4">Investment Overview</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-[#503E24]">Total Investment</span>
-                    <span className="font-bold text-[#503E24]">$11.7M</span>
+                    <span className="text-[#E8E0D4]">Total Investment</span>
+                    <span className="font-bold text-white">$11.7M</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#503E24]">Investor Equity</span>
-                    <span className="font-bold text-[#503E24]">33%</span>
+                    <span className="text-[#E8E0D4]">Investor Equity</span>
+                    <span className="font-bold text-white">33%</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#503E24]">Projected Exit Value</span>
-                    <span className="font-bold text-[#503E24]">$16.6M</span>
+                    <span className="text-[#E8E0D4]">Projected Exit Value</span>
+                    <span className="font-bold text-white">$16.6M</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#503E24]">Investment Period</span>
-                    <span className="font-bold text-[#503E24]">10 years</span>
+                    <span className="text-[#E8E0D4]">Investment Period</span>
+                    <span className="font-bold text-white">10 years</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#503E24]">Total Return on Investment</span>
-                    <span className="font-bold text-[#503E24]">$40.4M</span>
+                    <span className="text-[#E8E0D4]">Total Return on Investment</span>
+                    <span className="font-bold text-white">$40.4M</span>
                   </div>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-[#503E24] mb-4">Investment Tranches</h3>
+                <h3 className="text-xl font-bold text-white mb-4">Investment Tranches</h3>
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-[#503E24]">Tranche 1 (2025): $4.5M</span>
-                      <span className="text-sm text-[#503E24]/70">38.5%</span>
+                      <span className="text-[#E8E0D4]">Tranche 1 (2025): $4.5M</span>
+                      <span className="text-sm text-[#E8E0D4]/70">38.5%</span>
                     </div>
-                    <Progress value={38.5} className="h-2" indicatorClassName="bg-[#B68D53]" />
+                    <Progress value={38.5} className="h-2" indicatorClassName="bg-[#B89068]" />
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-[#503E24]">Tranche 2 (2026): $4.9M</span>
-                      <span className="text-sm text-[#503E24]/70">41.8%</span>
+                      <span className="text-[#E8E0D4]">Tranche 2 (2026): $4.9M</span>
+                      <span className="text-sm text-[#E8E0D4]/70">41.8%</span>
                     </div>
-                    <Progress value={41.8} className="h-2" indicatorClassName="bg-[#B68D53]" />
+                    <Progress value={41.8} className="h-2" indicatorClassName="bg-[#B89068]" />
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-[#503E24]">Tranche 3 (2027): $2.3M</span>
-                      <span className="text-sm text-[#503E24]/70">19.7%</span>
+                      <span className="text-[#E8E0D4]">Tranche 3 (2027): $2.3M</span>
+                      <span className="text-sm text-[#E8E0D4]/70">19.7%</span>
                     </div>
-                    <Progress value={19.7} className="h-2" indicatorClassName="bg-[#B68D53]" />
+                    <Progress value={19.7} className="h-2" indicatorClassName="bg-[#B89068]" />
                   </div>
-                  <div className="mt-2 text-sm text-[#503E24] font-medium bg-[#F8F5F0] p-2 rounded-md">
+                  <div className="mt-2 text-sm text-[#E8E0D4] font-medium bg-[#2A362A] p-2 rounded-md">
                     Each investment tranche is repaid within 5 years of payment
                   </div>
                 </div>
@@ -177,17 +177,17 @@ export default function FinancialsPage() {
       </motion.div>
 
       <motion.div variants={item}>
-        <h2 className="text-2xl font-bold text-[#503E24] mb-4">Key Financial Metrics</h2>
+        <h2 className="text-2xl font-bold text-white mb-4">Key Financial Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {keyMetrics.map((metric) => (
-            <Card key={metric.name} className="border-[#B68D53]/20">
+            <Card key={metric.name} className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardContent className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-[#503E24]">{metric.name}</h3>
-                  <TrendingUp className="h-5 w-5 text-[#B68D53]" />
+                  <h3 className="font-bold text-white">{metric.name}</h3>
+                  <TrendingUp className="h-5 w-5 text-[#B89068]" />
                 </div>
-                <div className="text-3xl font-bold text-[#B68D53]">{metric.value}</div>
-                <Progress value={metric.progress} className="h-2" indicatorClassName="bg-[#B68D53]" />
+                <div className="text-3xl font-bold text-[#B89068]">{metric.value}</div>
+                <Progress value={metric.progress} className="h-2" indicatorClassName="bg-[#B89068]" />
               </CardContent>
             </Card>
           ))}
@@ -196,31 +196,40 @@ export default function FinancialsPage() {
 
       <motion.div variants={item}>
         <Tabs defaultValue="revenue" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="revenue">
+          <TabsList className="grid w-full grid-cols-3 mb-6 bg-[#2A362A]">
+            <TabsTrigger
+              value="revenue"
+              className="text-[#E8E0D4] data-[state=active]:bg-[#B89068] data-[state=active]:text-white"
+            >
               <PieChart className="h-4 w-4 mr-2" />
               Revenue Streams
             </TabsTrigger>
-            <TabsTrigger value="projections">
+            <TabsTrigger
+              value="projections"
+              className="text-[#E8E0D4] data-[state=active]:bg-[#B89068] data-[state=active]:text-white"
+            >
               <LineIcon className="h-4 w-4 mr-2" />
               10-Year Projections
             </TabsTrigger>
-            <TabsTrigger value="returns">
+            <TabsTrigger
+              value="returns"
+              className="text-[#E8E0D4] data-[state=active]:bg-[#B89068] data-[state=active]:text-white"
+            >
               <BarIcon className="h-4 w-4 mr-2" />
               Investor Returns
             </TabsTrigger>
           </TabsList>
           <TabsContent value="revenue">
-            <Card className="border-[#B68D53]/20">
+            <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardHeader>
-                <CardTitle className="text-[#503E24]">Revenue Streams</CardTitle>
-                <CardDescription className="text-[#503E24]/70">Breakdown of projected revenue sources</CardDescription>
+                <CardTitle className="text-white">Revenue Streams</CardTitle>
+                <CardDescription className="text-[#E8E0D4]/70">Breakdown of projected revenue sources</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex justify-center">
                   <div className="relative w-64 h-64">
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <DollarSign className="h-12 w-12 text-[#B68D53]" />
+                      <DollarSign className="h-12 w-12 text-[#B89068]" />
                     </div>
                     <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
                       {
@@ -255,9 +264,9 @@ export default function FinancialsPage() {
                     <div key={stream.name} className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
                         <div className="w-4 h-4 rounded-full" style={{ backgroundColor: stream.color }}></div>
-                        <span className="font-medium text-[#503E24]">{stream.name}</span>
+                        <span className="font-medium text-white">{stream.name}</span>
                       </div>
-                      <div className="text-lg font-bold text-[#503E24]">{stream.percentage}%</div>
+                      <div className="text-lg font-bold text-[#E8E0D4]">{stream.percentage}%</div>
                     </div>
                   ))}
                 </div>
@@ -265,10 +274,10 @@ export default function FinancialsPage() {
             </Card>
           </TabsContent>
           <TabsContent value="projections">
-            <Card className="border-[#B68D53]/20">
+            <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardHeader>
-                <CardTitle className="text-[#503E24]">10-Year Financial Projections</CardTitle>
-                <CardDescription className="text-[#503E24]/70">
+                <CardTitle className="text-white">10-Year Financial Projections</CardTitle>
+                <CardDescription className="text-[#E8E0D4]/70">
                   Revenue and EBITDA projections from 2025 to 2034
                 </CardDescription>
               </CardHeader>
@@ -276,26 +285,26 @@ export default function FinancialsPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[600px]">
                     <thead>
-                      <tr className="border-b border-[#B68D53]/20">
-                        <th className="text-left py-3 px-4 text-[#503E24]">Year</th>
-                        <th className="text-left py-3 px-4 text-[#503E24]">Phase</th>
-                        <th className="text-right py-3 px-4 text-[#503E24]">Revenue (M)</th>
-                        <th className="text-right py-3 px-4 text-[#503E24]">EBITDA (M)</th>
-                        <th className="text-right py-3 px-4 text-[#503E24]">EBITDA Margin</th>
+                      <tr className="border-b border-[#B89068]/20">
+                        <th className="text-left py-3 px-4 text-white">Year</th>
+                        <th className="text-left py-3 px-4 text-white">Phase</th>
+                        <th className="text-right py-3 px-4 text-white">Revenue (M)</th>
+                        <th className="text-right py-3 px-4 text-white">EBITDA (M)</th>
+                        <th className="text-right py-3 px-4 text-white">EBITDA Margin</th>
                       </tr>
                     </thead>
                     <tbody>
                       {yearlyProjections.map((year) => (
-                        <tr key={year.year} className="border-b border-[#B68D53]/10">
-                          <td className="py-3 px-4 text-[#503E24]">{year.year}</td>
-                          <td className="py-3 px-4 text-[#503E24]">{year.phase}</td>
-                          <td className="py-3 px-4 text-right text-[#503E24]">${year.revenue.toFixed(1)}M</td>
-                          <td className="py-3 px-4 text-right text-[#503E24]">
-                            <span className={year.ebitda < 0 ? "text-red-500" : "text-green-600"}>
+                        <tr key={year.year} className="border-b border-[#B89068]/10">
+                          <td className="py-3 px-4 text-[#E8E0D4]">{year.year}</td>
+                          <td className="py-3 px-4 text-[#E8E0D4]">{year.phase}</td>
+                          <td className="py-3 px-4 text-right text-[#E8E0D4]">${year.revenue.toFixed(1)}M</td>
+                          <td className="py-3 px-4 text-right text-[#E8E0D4]">
+                            <span className={year.ebitda < 0 ? "text-red-400" : "text-green-400"}>
                               ${year.ebitda.toFixed(1)}M
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-right text-[#503E24]">
+                          <td className="py-3 px-4 text-right text-[#E8E0D4]">
                             {year.revenue > 0 ? `${((year.ebitda / year.revenue) * 100).toFixed(1)}%` : "N/A"}
                           </td>
                         </tr>
@@ -307,39 +316,39 @@ export default function FinancialsPage() {
             </Card>
           </TabsContent>
           <TabsContent value="returns">
-            <Card className="border-[#B68D53]/20">
+            <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardHeader>
-                <CardTitle className="text-[#503E24]">Investor Returns</CardTitle>
-                <CardDescription className="text-[#503E24]/70">
+                <CardTitle className="text-white">Investor Returns</CardTitle>
+                <CardDescription className="text-[#E8E0D4]/70">
                   Projected returns on investment over the 10-year period
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-[#F8F5F0] p-6 rounded-lg text-center">
-                    <h3 className="text-lg font-medium text-[#503E24] mb-2">Initial Investment</h3>
-                    <div className="text-3xl font-bold text-[#B68D53]">$11.7M</div>
-                    <p className="text-sm text-[#503E24]/70 mt-2">Total capital contribution</p>
+                  <div className="bg-[#2A362A] p-6 rounded-lg text-center">
+                    <h3 className="text-lg font-medium text-white mb-2">Initial Investment</h3>
+                    <div className="text-3xl font-bold text-[#B89068]">$11.7M</div>
+                    <p className="text-sm text-[#E8E0D4]/70 mt-2">Total capital contribution</p>
                   </div>
-                  <div className="bg-[#F8F5F0] p-6 rounded-lg text-center">
-                    <h3 className="text-lg font-medium text-[#503E24] mb-2">Total Returns</h3>
-                    <div className="text-3xl font-bold text-[#B68D53]">$23.8M</div>
-                    <p className="text-sm text-[#503E24]/70 mt-2">Total share of EBITDA</p>
+                  <div className="bg-[#2A362A] p-6 rounded-lg text-center">
+                    <h3 className="text-lg font-medium text-white mb-2">Total Returns</h3>
+                    <div className="text-3xl font-bold text-[#B89068]">$23.8M</div>
+                    <p className="text-sm text-[#E8E0D4]/70 mt-2">Total share of EBITDA</p>
                   </div>
-                  <div className="bg-[#F8F5F0] p-6 rounded-lg text-center">
-                    <h3 className="text-lg font-medium text-[#503E24] mb-2">Equity Multiple</h3>
-                    <div className="text-3xl font-bold text-[#B68D53]">3.45x</div>
-                    <p className="text-sm text-[#503E24]/70 mt-2">Multiple on Invested Capital</p>
+                  <div className="bg-[#2A362A] p-6 rounded-lg text-center">
+                    <h3 className="text-lg font-medium text-white mb-2">Equity Multiple</h3>
+                    <div className="text-3xl font-bold text-[#B89068]">3.45x</div>
+                    <p className="text-sm text-[#E8E0D4]/70 mt-2">Multiple on Invested Capital</p>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <h4 className="font-medium text-[#503E24] text-xl">Yearly Investor Returns</h4>
-                  <div className="flex items-center space-x-2 bg-[#F8F5F0] rounded-lg p-1">
+                  <h4 className="font-medium text-white text-xl">Yearly Investor Returns</h4>
+                  <div className="flex items-center space-x-2 bg-[#2A362A] rounded-lg p-1">
                     <button
                       onClick={() => setViewMode("yearly")}
                       className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                        viewMode === "yearly" ? "bg-[#B68D53] text-white" : "text-[#503E24] hover:bg-[#B68D53]/10"
+                        viewMode === "yearly" ? "bg-[#B89068] text-white" : "text-[#E8E0D4] hover:bg-[#B89068]/10"
                       }`}
                     >
                       Yearly
@@ -347,7 +356,7 @@ export default function FinancialsPage() {
                     <button
                       onClick={() => setViewMode("cumulative")}
                       className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                        viewMode === "cumulative" ? "bg-[#B68D53] text-white" : "text-[#503E24] hover:bg-[#B68D53]/10"
+                        viewMode === "cumulative" ? "bg-[#B89068] text-white" : "text-[#E8E0D4] hover:bg-[#B89068]/10"
                       }`}
                     >
                       Cumulative
@@ -355,16 +364,16 @@ export default function FinancialsPage() {
                   </div>
                 </div>
 
-                <div className="h-96 bg-[#F8F5F0]/50 rounded-lg p-6 border border-[#B68D53]/20">
+                <div className="h-96 bg-[#2A362A] rounded-lg p-6 border border-[#B89068]/20">
                   <ChartContainer
                     config={{
                       yearly: {
                         label: "Yearly Returns",
-                        color: "hsl(var(--primary))",
+                        color: "#B89068",
                       },
                       cumulative: {
                         label: "Cumulative Returns",
-                        color: "#D4AF37",
+                        color: "#8D6E4E",
                       },
                     }}
                     className="h-full w-full"
@@ -372,17 +381,17 @@ export default function FinancialsPage() {
                     <ResponsiveContainer width="100%" height="100%">
                       {viewMode === "yearly" ? (
                         <BarChart data={yearlyInvestorReturns} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B68D5333" />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B89068" opacity={0.2} />
                           <XAxis
                             dataKey="year"
-                            tick={{ fill: "#503E24", fontSize: 12 }}
-                            axisLine={{ stroke: "#B68D5333" }}
-                            tickLine={{ stroke: "#B68D5333" }}
+                            tick={{ fill: "#E8E0D4", fontSize: 12 }}
+                            axisLine={{ stroke: "#B89068", opacity: 0.2 }}
+                            tickLine={{ stroke: "#B89068", opacity: 0.2 }}
                           />
                           <YAxis
-                            tick={{ fill: "#503E24", fontSize: 12 }}
-                            axisLine={{ stroke: "#B68D5333" }}
-                            tickLine={{ stroke: "#B68D5333" }}
+                            tick={{ fill: "#E8E0D4", fontSize: 12 }}
+                            axisLine={{ stroke: "#B89068", opacity: 0.2 }}
+                            tickLine={{ stroke: "#B89068", opacity: 0.2 }}
                             tickFormatter={(value) => `$${value}M`}
                             domain={[0, 5]}
                           />
@@ -390,10 +399,10 @@ export default function FinancialsPage() {
                             content={({ active, payload, label }) => {
                               if (active && payload && payload.length) {
                                 return (
-                                  <div className="bg-white p-3 border border-[#B68D53]/20 rounded-md shadow-md">
-                                    <p className="font-medium text-[#503E24]">{label}</p>
-                                    <p className="text-[#B68D53] font-bold">${payload[0].value.toFixed(2)}M</p>
-                                    <p className="text-xs text-[#503E24]/70">{payload[0].payload.phase}</p>
+                                  <div className="bg-[#2A362A] p-3 border border-[#B89068]/20 rounded-md shadow-md">
+                                    <p className="font-medium text-white">{label}</p>
+                                    <p className="text-[#B89068] font-bold">${payload[0].value.toFixed(2)}M</p>
+                                    <p className="text-xs text-[#E8E0D4]/70">{payload[0].payload.phase}</p>
                                   </div>
                                 )
                               }
@@ -402,48 +411,45 @@ export default function FinancialsPage() {
                           />
                           <Bar
                             dataKey="return"
-                            fill="var(--color-yearly)"
+                            fill="#B89068"
                             radius={[4, 4, 0, 0]}
                             animationDuration={1500}
                             onMouseOver={(data) => setHoveredYear(data.year)}
                             onMouseLeave={() => setHoveredYear(null)}
                           >
                             {yearlyInvestorReturns.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={hoveredYear === entry.year ? "#D4AF37" : "var(--color-yearly)"}
-                              />
+                              <Cell key={`cell-${index}`} fill={hoveredYear === entry.year ? "#8D6E4E" : "#B89068"} />
                             ))}
                           </Bar>
                           <Legend
                             verticalAlign="top"
                             height={36}
-                            formatter={(value) => <span className="text-[#503E24] font-medium">Yearly Returns</span>}
+                            formatter={(value) => <span className="text-white font-medium">Yearly Returns</span>}
                           />
                         </BarChart>
                       ) : (
                         <LineChart data={cumulativeReturns} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B68D5333" />
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#B89068" opacity={0.2} />
                           <XAxis
                             dataKey="year"
-                            tick={{ fill: "#503E24", fontSize: 12 }}
-                            axisLine={{ stroke: "#B68D5333" }}
-                            tickLine={{ stroke: "#B68D5333" }}
+                            tick={{ fill: "#E8E0D4", fontSize: 12 }}
+                            axisLine={{ stroke: "#B89068", opacity: 0.2 }}
+                            tickLine={{ stroke: "#B89068", opacity: 0.2 }}
                           />
                           <YAxis
-                            tick={{ fill: "#503E24", fontSize: 12 }}
-                            axisLine={{ stroke: "#B68D5333" }}
-                            tickLine={{ stroke: "#B68D5333" }}
+                            tick={{ fill: "#E8E0D4", fontSize: 12 }}
+                            axisLine={{ stroke: "#B89068", opacity: 0.2 }}
+                            tickLine={{ stroke: "#B89068", opacity: 0.2 }}
                             tickFormatter={(value) => `$${value}M`}
                           />
                           <ChartTooltip
                             content={({ active, payload, label }) => {
                               if (active && payload && payload.length) {
                                 return (
-                                  <div className="bg-white p-3 border border-[#B68D53]/20 rounded-md shadow-md">
-                                    <p className="font-medium text-[#503E24]">{label}</p>
-                                    <p className="text-[#D4AF37] font-bold">${payload[0].value.toFixed(2)}M</p>
-                                    <p className="text-xs text-[#503E24]/70">{payload[0].payload.phase}</p>
+                                  <div className="bg-[#2A362A] p-3 border border-[#B89068]/20 rounded-md shadow-md">
+                                    <p className="font-medium text-white">{label}</p>
+                                    <p className="text-[#8D6E4E] font-bold">${payload[0].value.toFixed(2)}M</p>
+                                    <p className="text-xs text-[#E8E0D4]/70">{payload[0].payload.phase}</p>
                                   </div>
                                 )
                               }
@@ -453,18 +459,16 @@ export default function FinancialsPage() {
                           <Line
                             type="monotone"
                             dataKey="return"
-                            stroke="var(--color-cumulative)"
+                            stroke="#8D6E4E"
                             strokeWidth={3}
-                            dot={{ fill: "var(--color-cumulative)", r: 4 }}
-                            activeDot={{ r: 6, fill: "#D4AF37" }}
+                            dot={{ fill: "#8D6E4E", r: 4 }}
+                            activeDot={{ r: 6, fill: "#B89068" }}
                             animationDuration={1500}
                           />
                           <Legend
                             verticalAlign="top"
                             height={36}
-                            formatter={(value) => (
-                              <span className="text-[#503E24] font-medium">Cumulative Returns</span>
-                            )}
+                            formatter={(value) => <span className="text-white font-medium">Cumulative Returns</span>}
                           />
                         </LineChart>
                       )}
@@ -474,16 +478,16 @@ export default function FinancialsPage() {
 
                 <div className="text-center space-y-2 mt-6">
                   <motion.p
-                    className="text-sm font-medium text-[#503E24]"
+                    className="text-sm font-medium text-[#E8E0D4]"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.5 }}
                   >
-                    Total investor share of EBITDA reaches <span className="font-bold text-[#B68D53]">$23.8M</span> by
+                    Total investor share of EBITDA reaches <span className="font-bold text-[#B89068]">$23.8M</span> by
                     2034
                   </motion.p>
                   <motion.p
-                    className="text-xs text-[#503E24]/70"
+                    className="text-xs text-[#E8E0D4]/70"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.7 }}
@@ -492,12 +496,12 @@ export default function FinancialsPage() {
                   </motion.p>
                   {viewMode === "cumulative" && (
                     <motion.div
-                      className="flex items-center justify-center gap-2 text-xs text-[#503E24]/70"
+                      className="flex items-center justify-center gap-2 text-xs text-[#E8E0D4]/70"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1.9 }}
                     >
-                      <div className="w-3 h-0 border-b-2 border-[#D4AF37]"></div>
+                      <div className="w-3 h-0 border-b-2 border-[#8D6E4E]"></div>
                       <span>Cumulative returns trend</span>
                     </motion.div>
                   )}
@@ -509,11 +513,11 @@ export default function FinancialsPage() {
       </motion.div>
 
       <motion.div variants={item}>
-        <Card className="border-[#B68D53]/20">
+        <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-bold text-[#503E24]">Investment Structure</h3>
-              <p className="text-[#503E24]/80 max-w-3xl mx-auto">
+              <h3 className="text-2xl font-bold text-white">Investment Structure</h3>
+              <p className="text-[#E8E0D4] max-w-3xl mx-auto">
                 Sanctum offers a compelling investment structure with 33% equity available to investors, staged capital
                 contributions, and preferred returns of 30% of EBITDA for each investment tranche. This structure is
                 designed to align interests, minimize risk, and maximize returns for all stakeholders.

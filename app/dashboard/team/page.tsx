@@ -23,22 +23,22 @@ export default function TeamPage() {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <motion.div variants={item} className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#503E24] font-playfair">Our Team</h1>
-        <p className="text-[#503E24]/80 text-lg">Meet the experienced team behind Sanctum's vision and execution</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-white font-playfair">Our Team</h1>
+        <p className="text-[#E8E0D4] text-lg">Meet the experienced team behind Sanctum's vision and execution</p>
       </motion.div>
 
       <motion.div variants={item}>
         <Tabs defaultValue="founders" className="space-y-6">
-          <TabsList className="bg-white border-[#B68D53]/20">
+          <TabsList className="bg-[#2A362A] border-[#B89068]/20">
             <TabsTrigger
               value="founders"
-              className="text-[#503E24] data-[state=active]:bg-[#B68D53] data-[state=active]:text-white"
+              className="text-[#E8E0D4] data-[state=active]:bg-[#B89068] data-[state=active]:text-white"
             >
               Founders
             </TabsTrigger>
             <TabsTrigger
               value="advisors"
-              className="text-[#503E24] data-[state=active]:bg-[#B68D53] data-[state=active]:text-white"
+              className="text-[#E8E0D4] data-[state=active]:bg-[#B89068] data-[state=active]:text-white"
             >
               Advisors & Consultants
             </TabsTrigger>
@@ -46,13 +46,13 @@ export default function TeamPage() {
 
           <TabsContent value="founders" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Abel Kramer</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Founder & Visionary</CardDescription>
+                  <CardTitle className="text-white">Abel Kramer</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Founder & Visionary</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Serial entrepreneur with over 25 years of construction experience and 15+ years in Asia. Abel brings
                     extensive design and engineering expertise, having provided consultancy services to major clients
                     including Apple Inc and Foster + Partners. His vision and leadership drive Sanctum's innovative
@@ -61,13 +61,13 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Alex Odonga</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Investments & Legal</CardDescription>
+                  <CardTitle className="text-white">Alex Odonga</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Investments & Legal</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     With a background in global finance and law, Alex blends institutional expertise with a commitment
                     to purposeful ventures. As Principal of AIJ Holdings (formerly known as AI Global), a family-owned,
                     independent investment firm specializing in real estate projects, search funds, and late-stage
@@ -76,13 +76,13 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Rod Wilson</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Finance & Operations</CardDescription>
+                  <CardTitle className="text-white">Rod Wilson</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Finance & Operations</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Strategic CFO, advisor, and systems builder with 20+ years of experience across finance and
                     operations. Rod is the financial architect behind Sanctum's growth model, with deep expertise in
                     turning vision into viable ventures. His operational acumen ensures the project's financial
@@ -95,13 +95,13 @@ export default function TeamPage() {
 
           <TabsContent value="advisors" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Dr. Steve James</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Holistic Longevity Consultant</CardDescription>
+                  <CardTitle className="text-white">Dr. Steve James</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Holistic Longevity Consultant</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Cambridge University graduate with over 25 years of hospital experience and 12 years of consultant
                     experience in Sleep Medicine, Functional Medicine, nutrition, and blood chemistry. Trained with
                     Gabor Maté in trauma-informed psychotherapy.
@@ -109,13 +109,13 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Dr. Peter Malinowski</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Professor of Neurology</CardDescription>
+                  <CardTitle className="text-white">Dr. Peter Malinowski</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Professor of Neurology</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Programme Leader for LJMU's MSc Positive Psychology and Wellbeing Programme and co-directs LJMU's
                     Research Centre for Brain and Behaviour. Brings cutting-edge neurological expertise to Sanctum's
                     wellness programs.
@@ -123,13 +123,13 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Shadi Shahroudi</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Spa & Wellness Expert</CardDescription>
+                  <CardTitle className="text-white">Shadi Shahroudi</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Spa & Wellness Expert</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Spa and Wellness entrepreneur with 20+ years of experience in Europe and now leads a thriving Spa
                     business in Bali. Provides expertise in spa operations, treatments, and wellness program
                     development.
@@ -137,13 +137,13 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Nassim Abib</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Culinary Consultant</CardDescription>
+                  <CardTitle className="text-white">Nassim Abib</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Culinary Consultant</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Co-founder of Village, with over 10 years experience in heading operations for commercial catering
                     events and festivals, as well as meal plans for post-partum mothers. Brings farm-to-table expertise
                     to Sanctum's dining experience.
@@ -151,28 +151,28 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Advant</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">
+                  <CardTitle className="text-white">Advant</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">
                     Asia Centric Boutique Hospitality Advisors
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Specialized hospitality consultancy with deep expertise in the Asian luxury market, providing
                     strategic guidance on operations, guest experience, and market positioning.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-[#B68D53]/20">
+              <Card className="bg-[#3B4A3A] border-[#B89068]/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-[#503E24]">Aethos</CardTitle>
-                  <CardDescription className="text-[#503E24]/70">Systems Driven Hospitality Advisors</CardDescription>
+                  <CardTitle className="text-white">Aethos</CardTitle>
+                  <CardDescription className="text-[#E8E0D4]/70">Systems Driven Hospitality Advisors</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#503E24]/80">
+                  <p className="text-sm text-[#E8E0D4]">
                     Leading hospitality advisory firm focused on creating efficient operational systems and processes to
                     ensure exceptional guest experiences and operational excellence.
                   </p>
@@ -184,19 +184,19 @@ export default function TeamPage() {
       </motion.div>
 
       <motion.div variants={item}>
-        <Card className="bg-white border-[#B68D53]/20">
+        <Card className="bg-[#3B4A3A] border-[#B89068]/20">
           <CardHeader>
-            <CardTitle className="text-[#503E24]">Our Approach</CardTitle>
-            <CardDescription className="text-[#503E24]/70">How our team delivers exceptional value</CardDescription>
+            <CardTitle className="text-white">Our Approach</CardTitle>
+            <CardDescription className="text-[#E8E0D4]/70">How our team delivers exceptional value</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-[#503E24]/80">
+            <p className="text-[#E8E0D4]">
               The Sanctum team combines deep expertise across multiple disciplines to create a truly unique wellness and
               longevity sanctuary. Our founders bring complementary skills in construction, finance, and strategic
               vision, while our advisors and consultants provide specialized knowledge in wellness, hospitality, and
               health sciences.
             </p>
-            <p className="text-[#503E24]/80">
+            <p className="text-[#E8E0D4]">
               This integrated approach allows us to deliver a comprehensive wellness experience that merges ancient
               healing principles with cutting-edge science, all within a luxurious and sustainable environment. Our
               team's collective experience ensures that Sanctum will not only provide exceptional guest experiences but

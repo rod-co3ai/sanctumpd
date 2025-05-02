@@ -299,22 +299,26 @@ export default function AdminPage() {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <motion.div variants={item} className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#503E24] font-playfair">Admin Panel</h1>
-        <p className="text-[#503E24]/80 text-lg">Manage access requests and user accounts</p>
+        <h1 className="text-3xl md:text-4xl font-bold text-white font-playfair">Admin Panel</h1>
+        <p className="text-[#E8E0D4] text-lg">Manage access requests and user accounts</p>
       </motion.div>
 
       <motion.div variants={item}>
         <Tabs defaultValue="requests" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="requests">Access Requests</TabsTrigger>
-            <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-[#4C5A4B] text-white">
+            <TabsTrigger value="requests" className="data-[state=active]:bg-[#B68D53] data-[state=active]:text-white">
+              Access Requests
+            </TabsTrigger>
+            <TabsTrigger value="users" className="data-[state=active]:bg-[#B68D53] data-[state=active]:text-white">
+              User Management
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="requests">
-            <Card className="border-[#B68D53]/20">
+            <Card className="border-[#B68D53]/20 bg-[#3B4A3A]">
               <CardHeader>
-                <CardTitle className="text-[#503E24]">Access Requests</CardTitle>
-                <CardDescription className="text-[#503E24]/70">
+                <CardTitle className="text-white">Access Requests</CardTitle>
+                <CardDescription className="text-[#E8E0D4]/80">
                   Review and manage pending access requests
                 </CardDescription>
               </CardHeader>
@@ -324,26 +328,26 @@ export default function AdminPage() {
                     <Loader2 className="h-8 w-8 animate-spin text-[#B68D53]" />
                   </div>
                 ) : accessRequests.length === 0 ? (
-                  <div className="text-center py-8 text-[#503E24]/70">No access requests found</div>
+                  <div className="text-center py-8 text-[#E8E0D4]/70">No access requests found</div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Organization</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Actions</TableHead>
+                        <TableRow className="border-b border-[#B68D53]/30">
+                          <TableHead className="text-[#E8E0D4]">Name</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Email</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Organization</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Status</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Date</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {accessRequests.map((request) => (
                           <TableRow key={request.id}>
-                            <TableCell className="font-medium">{request.name || "-"}</TableCell>
-                            <TableCell>{request.email}</TableCell>
-                            <TableCell>{request.organization || "-"}</TableCell>
+                            <TableCell className="font-medium text-[#E8E0D4]">{request.name || "-"}</TableCell>
+                            <TableCell className="text-[#E8E0D4]">{request.email}</TableCell>
+                            <TableCell className="text-[#E8E0D4]">{request.organization || "-"}</TableCell>
                             <TableCell>
                               <Badge
                                 variant={getStatusBadgeVariant(request.status)}
@@ -389,7 +393,7 @@ export default function AdminPage() {
                                             onChange={(e) => setPassword(e.target.value)}
                                             placeholder="Enter a secure password"
                                           />
-                                          <p className="text-xs text-[#503E24]/70">
+                                          <p className="text-xs text-[#E8E0D4]/70">
                                             This password will be set for the new user account. The user can change it
                                             later.
                                           </p>
@@ -450,7 +454,7 @@ export default function AdminPage() {
                                             placeholder="Enter a reason for denying this request"
                                             rows={3}
                                           />
-                                          <p className="text-xs text-[#503E24]/70">
+                                          <p className="text-xs text-[#E8E0D4]/70">
                                             This reason will be recorded for internal reference.
                                           </p>
                                         </div>
@@ -474,7 +478,7 @@ export default function AdminPage() {
                                   </Dialog>
                                 </div>
                               ) : (
-                                <div className="text-sm text-[#503E24]/70">
+                                <div className="text-sm text-[#E8E0D4]/70">
                                   {request.status === "Granted" ? "Approved" : "Denied"} on{" "}
                                   {request.processed_at ? new Date(request.processed_at).toLocaleDateString() : "N/A"}
                                 </div>
@@ -491,10 +495,10 @@ export default function AdminPage() {
           </TabsContent>
 
           <TabsContent value="users">
-            <Card className="border-[#B68D53]/20">
+            <Card className="border-[#B68D53]/20 bg-[#3B4A3A]">
               <CardHeader>
-                <CardTitle className="text-[#503E24]">User Management</CardTitle>
-                <CardDescription className="text-[#503E24]/70">Manage user accounts and permissions</CardDescription>
+                <CardTitle className="text-white">User Management</CardTitle>
+                <CardDescription className="text-[#E8E0D4]/80">Manage user accounts and permissions</CardDescription>
               </CardHeader>
               <CardContent>
                 {isLoadingUsers ? (
@@ -502,25 +506,26 @@ export default function AdminPage() {
                     <Loader2 className="h-8 w-8 animate-spin text-[#B68D53]" />
                   </div>
                 ) : users.length === 0 ? (
-                  <div className="text-center py-8 text-[#503E24]/70">No users found</div>
+                  <div className="text-center py-8 text-[#E8E0D4]/70">No users found</div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Role</TableHead>
-                          <TableHead>Last Sign In</TableHead>
-                          <TableHead>Created</TableHead>
-                          <TableHead>Actions</TableHead>
+                        <TableRow className="border-b border-[#B68D53]/30">
+                          <TableHead className="text-[#E8E0D4]">Name</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Email</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Role</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Last Sign In</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Created</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Role Actions</TableHead>
+                          <TableHead className="text-[#E8E0D4]">Delete</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {users.map((user) => (
                           <TableRow key={user.id}>
-                            <TableCell className="font-medium">{user.name || "-"}</TableCell>
-                            <TableCell>{user.email}</TableCell>
+                            <TableCell className="font-medium text-[#E8E0D4]">{user.name || "-"}</TableCell>
+                            <TableCell className="text-[#E8E0D4]">{user.email}</TableCell>
                             <TableCell>
                               <Badge
                                 variant={user.role === "admin" ? "default" : "outline"}
@@ -529,83 +534,84 @@ export default function AdminPage() {
                                 {user.role === "admin" ? "Admin" : "Standard"}
                               </Badge>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="text-[#E8E0D4]">
                               {user.last_sign_in ? new Date(user.last_sign_in).toLocaleString() : "Never"}
                             </TableCell>
-                            <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell className="text-[#E8E0D4]">
+                              {new Date(user.created_at).toLocaleDateString()}
+                            </TableCell>
                             <TableCell>
-                              <div className="flex space-x-2">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() =>
-                                    handleRoleChange(user.id, user.role === "admin" ? "standard" : "admin")
-                                  }
-                                >
-                                  <UserCog className="h-4 w-4 mr-1" />
-                                  {user.role === "admin" ? "Make Standard" : "Make Admin"}
-                                </Button>
-
-                                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                                  <DialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-[#B68D53] text-[#B68D53] hover:bg-[#B68D53]/20"
+                                onClick={() => handleRoleChange(user.id, user.role === "admin" ? "standard" : "admin")}
+                              >
+                                <UserCog className="h-4 w-4 mr-1" />
+                                {user.role === "admin" ? "Make Standard" : "Make Admin"}
+                              </Button>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="bg-red-700/40 text-white border border-red-400 hover:bg-red-700/60"
+                                    onClick={() => setUserToDelete(user)}
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Delete
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>Delete User</DialogTitle>
+                                    <DialogDescription>
+                                      This action cannot be undone. The user will be permanently deleted.
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="space-y-4 py-4">
+                                    <div className="space-y-2">
+                                      <Label htmlFor="confirm-email">
+                                        Type <span className="font-semibold">{userToDelete?.email}</span> to confirm
+                                      </Label>
+                                      <Input
+                                        id="confirm-email"
+                                        value={deleteConfirmEmail}
+                                        onChange={(e) => setDeleteConfirmEmail(e.target.value)}
+                                        placeholder="Enter email to confirm"
+                                      />
+                                    </div>
+                                  </div>
+                                  <DialogFooter>
                                     <Button
                                       variant="outline"
-                                      size="sm"
-                                      className="text-red-600 border-red-600 hover:bg-red-50"
-                                      onClick={() => setUserToDelete(user)}
+                                      onClick={() => {
+                                        setIsDeleteDialogOpen(false)
+                                        setDeleteConfirmEmail("")
+                                      }}
                                     >
-                                      <Trash2 className="h-4 w-4 mr-1" />
-                                      Delete
+                                      Cancel
                                     </Button>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle>Delete User</DialogTitle>
-                                      <DialogDescription>
-                                        This action cannot be undone. The user will be permanently deleted.
-                                      </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="space-y-4 py-4">
-                                      <div className="space-y-2">
-                                        <Label htmlFor="confirm-email">
-                                          Type <span className="font-semibold">{userToDelete?.email}</span> to confirm
-                                        </Label>
-                                        <Input
-                                          id="confirm-email"
-                                          value={deleteConfirmEmail}
-                                          onChange={(e) => setDeleteConfirmEmail(e.target.value)}
-                                          placeholder="Enter email to confirm"
-                                        />
-                                      </div>
-                                    </div>
-                                    <DialogFooter>
-                                      <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                          setIsDeleteDialogOpen(false)
-                                          setDeleteConfirmEmail("")
-                                        }}
-                                      >
-                                        Cancel
-                                      </Button>
-                                      <Button
-                                        onClick={handleDeleteUser}
-                                        disabled={deleteConfirmEmail !== userToDelete?.email || isProcessing}
-                                        variant="destructive"
-                                      >
-                                        {isProcessing ? (
-                                          <>
-                                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                            Deleting...
-                                          </>
-                                        ) : (
-                                          "Delete User"
-                                        )}
-                                      </Button>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
-                              </div>
+                                    <Button
+                                      onClick={handleDeleteUser}
+                                      disabled={deleteConfirmEmail !== userToDelete?.email || isProcessing}
+                                      variant="outline"
+                                      className="bg-red-700/40 text-white border border-red-400 hover:bg-red-700/60 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      {isProcessing ? (
+                                        <>
+                                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                          Deleting...
+                                        </>
+                                      ) : (
+                                        "Delete User"
+                                      )}
+                                    </Button>
+                                  </DialogFooter>
+                                </DialogContent>
+                              </Dialog>
                             </TableCell>
                           </TableRow>
                         ))}
