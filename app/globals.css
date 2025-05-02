@@ -4,65 +4,65 @@
 
 @layer base {
   :root {
-    --background: 158 42% 18%;
-    --foreground: 0 0% 100%;
+    --background: 120 13% 26%; /* #3B4A3A */
+    --foreground: 0 0% 100%; /* #FFFFFF */
 
-    --card: 158 42% 18%;
-    --card-foreground: 0 0% 100%;
+    --card: 120 13% 26%; /* #3B4A3A */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --popover: 158 42% 18%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 120 13% 26%; /* #3B4A3A */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --primary: 45 52% 52%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 33 28% 57%; /* #B89068 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --secondary: 0 0% 100%;
-    --secondary-foreground: 158 42% 18%;
+    --secondary: 33 30% 43%; /* #8D6E4E */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --muted: 158 30% 25%;
-    --muted-foreground: 0 0% 80%;
+    --muted: 120 10% 33%; /* #4C5A4B */
+    --muted-foreground: 33 36% 87%; /* #E8E0D4 */
 
-    --accent: 45 52% 52%;
-    --accent-foreground: 158 42% 18%;
+    --accent: 33 28% 57%; /* #B89068 */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --border: 158 30% 25%;
-    --input: 158 30% 25%;
-    --ring: 45 52% 52%;
+    --border: 33 28% 57%; /* #B89068 */
+    --input: 33 28% 57%; /* #B89068 */
+    --ring: 33 28% 57%; /* #B89068 */
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 158 42% 18%;
-    --foreground: 0 0% 100%;
+    --background: 120 13% 26%; /* #3B4A3A */
+    --foreground: 0 0% 100%; /* #FFFFFF */
 
-    --card: 158 42% 18%;
-    --card-foreground: 0 0% 100%;
+    --card: 120 13% 26%; /* #3B4A3A */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --popover: 158 42% 18%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 120 13% 26%; /* #3B4A3A */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --primary: 45 52% 52%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 33 28% 57%; /* #B89068 */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --secondary: 158 30% 25%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 33 30% 43%; /* #8D6E4E */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --muted: 158 30% 25%;
-    --muted-foreground: 0 0% 80%;
+    --muted: 120 10% 33%; /* #4C5A4B */
+    --muted-foreground: 33 36% 87%; /* #E8E0D4 */
 
-    --accent: 45 52% 52%;
-    --accent-foreground: 158 42% 18%;
+    --accent: 33 28% 57%; /* #B89068 */
+    --accent-foreground: 0 0% 100%; /* #FFFFFF */
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --border: 158 30% 25%;
-    --input: 158 30% 25%;
-    --ring: 45 52% 52%;
+    --border: 33 28% 57%; /* #B89068 */
+    --input: 33 28% 57%; /* #B89068 */
+    --ring: 33 28% 57%; /* #B89068 */
   }
 }
 
@@ -73,8 +73,55 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1,
+  h2 {
+    @apply font-playfair font-bold text-white;
+  }
+  h3 {
+    @apply font-bold text-[#B89068];
+  }
+  h4 {
+    @apply font-medium text-white;
+  }
 }
 
 .font-playfair {
   font-family: var(--font-playfair);
+}
+
+/* Custom utility classes for the Earthy Sanctuary palette */
+.bg-sanctuary-background {
+  background-color: #3b4a3a;
+}
+
+.bg-sanctuary-dark {
+  background-color: #2a362a;
+}
+
+.bg-sanctuary-muted {
+  background-color: #4c5a4b;
+}
+
+.text-sanctuary-accent {
+  color: #b89068;
+}
+
+.text-sanctuary-highlight {
+  color: #8d6e4e;
+}
+
+.text-sanctuary-subtext {
+  color: #e8e0d4;
+}
+
+.border-sanctuary-accent {
+  border-color: #b89068;
+}
+
+.hover-sanctuary-highlight:hover {
+  background-color: #8d6e4e;
+}
+
+.hover-sanctuary-accent-10:hover {
+  background-color: rgba(184, 144, 104, 0.1);
 }

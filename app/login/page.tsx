@@ -81,14 +81,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-sanctum-green p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#3B4A3A] p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="border-sanctum-gold/20 shadow-lg bg-sanctum-darkgreen">
+        <Card className="border-[#B89068]/20 bg-[#2A362A] shadow-lg">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
               <div className="h-12 w-12 flex items-center justify-center">
@@ -96,14 +96,14 @@ export default function LoginPage() {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-center text-white">Investor Portal</CardTitle>
-            <CardDescription className="text-center text-white/70">
+            <CardDescription className="text-center text-[#E8E0D4]">
               Enter your credentials to access the Sanctum investment opportunity
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-white">
+                <Label htmlFor="email" className="text-[#E8E0D4]">
                   Email
                 </Label>
                 <Input
@@ -113,15 +113,15 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-sanctum-gold/20 bg-sanctum-green/50 text-white focus:border-sanctum-gold focus:ring-sanctum-gold"
+                  className="border-[#B89068]/20 bg-[#3B4A3A] text-white focus:border-[#B89068] focus:ring-[#B89068]"
                 />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-white">
+                  <Label htmlFor="password" className="text-[#E8E0D4]">
                     Password
                   </Label>
-                  <Link href="#" className="text-sm text-sanctum-gold hover:underline">
+                  <Link href="#" className="text-sm text-[#B89068] hover:text-[#8D6E4E]">
                     Forgot password?
                   </Link>
                 </div>
@@ -133,11 +133,11 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="border-sanctum-gold/20 bg-sanctum-green/50 text-white focus:border-sanctum-gold focus:ring-sanctum-gold pr-10"
+                    className="border-[#B89068]/20 bg-[#3B4A3A] text-white focus:border-[#B89068] focus:ring-[#B89068] pr-10"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#E8E0D4] hover:text-white"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -146,7 +146,7 @@ export default function LoginPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-sanctum-gold hover:bg-sanctum-gold/80 text-white"
+                className="w-full bg-[#B89068] hover:bg-[#8D6E4E] text-white transition-colors"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
@@ -154,9 +154,9 @@ export default function LoginPage() {
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-white/70 text-center">
+            <div className="text-sm text-[#E8E0D4] text-center">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-sanctum-gold hover:underline">
+              <Link href="/register" className="text-[#B89068] hover:text-[#8D6E4E]">
                 Request access
               </Link>
             </div>

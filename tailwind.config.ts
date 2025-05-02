@@ -25,40 +25,43 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        sanctum: {
-          green: "#1A4D3B",
-          darkgreen: "#0F2C22",
-          gold: "#C5A05A",
-          cream: "#F8F5F0",
-          light: "#E6DFD4",
-        },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#B89068", // Terracotta gold
+          foreground: "#FFFFFF", // White
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#8D6E4E", // Earthy terracotta
+          foreground: "#FFFFFF", // White
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#4C5A4B", // Muted earthy green
+          foreground: "#E8E0D4", // Warm sand
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#8D6E4E", // Earthy terracotta
+          foreground: "#FFFFFF", // White
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "#3B4A3A", // Earthy green
+          foreground: "#FFFFFF", // White
+        },
+        // Add custom colors for direct access
+        sanctuary: {
+          background: "#3B4A3A", // Earthy green
+          darkBackground: "#2A362A", // Darker earthy green
+          text: "#FFFFFF", // White
+          subtext: "#E8E0D4", // Warm sand
+          gold: "#B89068", // Terracotta gold
+          terracotta: "#8D6E4E", // Earthy terracotta
+          mutedGreen: "#4C5A4B", // Muted earthy green
         },
       },
       borderRadius: {

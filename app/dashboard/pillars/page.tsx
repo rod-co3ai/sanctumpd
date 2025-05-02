@@ -55,8 +55,8 @@ export default function PillarsPage() {
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-8">
       <motion.div variants={item} className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#503E24]">SANCTUM'S SIX PILLARS OF PEAK HEALTH</h1>
-        <p className="text-[#503E24]/80 text-lg">
+        <h1 className="text-3xl md:text-4xl font-bold text-white">Sanctum's Six Pillars of Peak Health</h1>
+        <p className="text-[#E8E0D4] text-lg">
           Our comprehensive approach to wellness and longevity is built on six foundational pillars
         </p>
       </motion.div>
@@ -71,27 +71,27 @@ export default function PillarsPage() {
         {pillars.map((pillar, index) => (
           <Card
             key={index}
-            className="bg-white border-[#B68D53]/20 overflow-hidden hover:bg-[#F8F5F0] transition-colors"
+            className="bg-[#3B4A3A] border-[#B89068]/20 overflow-hidden hover:bg-[#4C5A4B] transition-colors"
           >
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 bg-[#D4AF37] rounded-full flex items-center justify-center">
+                <div className="h-8 w-8 bg-[#B89068] rounded-full flex items-center justify-center">
                   <span className="text-white font-bold">{index + 1}</span>
                 </div>
-                <h3 className="text-xl font-bold text-[#503E24]">{pillar.title}</h3>
+                <h3 className="text-xl font-bold text-white">{pillar.title}</h3>
               </div>
-              <p className="text-[#503E24]/80">{pillar.description}</p>
+              <p className="text-[#E8E0D4]">{pillar.description}</p>
             </CardContent>
           </Card>
         ))}
       </motion.div>
 
       <motion.div variants={item} className="pt-8">
-        <Card className="bg-white border-[#B68D53]/20">
+        <Card className="bg-[#3B4A3A] border-[#B89068]/20">
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-bold text-[#503E24]">Integrated Approach to Wellness</h3>
-              <p className="text-[#503E24]/80 max-w-3xl mx-auto">
+              <h3 className="text-2xl font-bold text-white">Integrated Approach to Wellness</h3>
+              <p className="text-[#E8E0D4] max-w-3xl mx-auto">
                 At Sanctum, we believe that true wellness comes from addressing all aspects of health simultaneously.
                 Our six pillars work together to create a comprehensive approach to longevity and vitality, tailored to
                 your unique needs and goals.
