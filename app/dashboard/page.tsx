@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowRight, BarChart3, Building2, Compass, FileText, Globe, Hexagon } from "lucide-react"
@@ -56,8 +57,14 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-        <div className="md:w-1/3 h-64 rounded-lg overflow-hidden">
-          <img src="/balinese-river-retreat.png" alt="Sanctum Bali Retreat" className="w-full h-full object-cover" />
+        <div className="md:w-1/3 h-64 rounded-lg overflow-hidden relative">
+          <Image
+            src="/Render_10_CircleArch.jpg"
+            alt="Sanctum Bali Circular Entrance"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
         </div>
       </motion.div>
 
@@ -251,7 +258,7 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
           <TabsContent value="team">
-            <Card className="border-[#B89কিন্ত068]/20 bg-[#3B4A3A]">
+            <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardHeader>
                 <CardTitle className="text-white">Leadership Team</CardTitle>
               </CardHeader>

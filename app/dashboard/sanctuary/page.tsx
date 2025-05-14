@@ -33,7 +33,13 @@ export default function SanctuaryPage() {
         <Card className="border-[#B89068]/20 overflow-hidden">
           <CardContent className="p-0">
             <div className="aspect-video relative">
-              <Image src="/balinese-serenity.png" alt="Sanctum Overview" fill className="object-cover" />
+              <Image
+                src="/Render_02_Resort.jpg"
+                alt="Sanctum Overview"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 100vw"
+              />
             </div>
           </CardContent>
         </Card>
@@ -79,7 +85,13 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/balinese-farm-to-table-feast.png" alt="Farm-to-Table" fill className="object-cover" />
+                <Image
+                  src="/Render_05_Pool.jpg"
+                  alt="Farm-to-Table"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">Farm-to-Table</h3>
@@ -94,7 +106,13 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/tropical-fitness-retreat.png" alt="State-of-the-Art Gym" fill className="object-cover" />
+                <Image
+                  src="/Render_11_Gym.jpg"
+                  alt="State-of-the-Art Gym"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">State-of-the-Art Gym</h3>
@@ -110,7 +128,13 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/bali-spa-waterfall.png" alt="Luxury Spa" fill className="object-cover" />
+                <Image
+                  src="/Render_08_Spa.jpg"
+                  alt="Luxury Spa"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">Luxury Spa</h3>

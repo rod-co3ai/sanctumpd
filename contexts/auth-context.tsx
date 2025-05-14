@@ -53,27 +53,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session)
 
         if (session?.user) {
-          // Fetch user role from profiles
-          const { data: profile, error: profileError } = await supabase
-            .from("profiles")
-            .select("role")
-            .eq("id", session.user.id)
-            .single()
+          try {
+            // Fetch user role from profiles
+            const { data: profile, error: profileError } = await supabase
+              .from("profiles")
+              .select("role")
+              .eq("id", session.user.id)
+              .single()
 
-          console.log("Profile data for role:", profile, "Error:", profileError)
+            if (profileError) {
+              // Only log as error if it's not the "No rows found" error
+              if (profileError.code !== "PGRST116") {
+                console.error("Error fetching profile:", profileError.message)
+              }
+              // Continue with default role even if profile fetch fails
+            }
 
-          if (profileError && profileError.code !== "PGRST116") {
-            console.error("Error fetching profile:", profileError.message)
+            const userWithRole = {
+              ...session.user,
+              role: profile?.role || "standard",
+            }
+
+            setUser(userWithRole)
+            setIsAdmin(profile?.role === "admin")
+          } catch (profileFetchError) {
+            // Handle any unexpected errors during profile fetch
+            console.error("Error fetching profile data:", profileFetchError)
+            // Set user with default role
+            setUser({
+              ...session.user,
+              role: "standard",
+            })
+            setIsAdmin(false)
           }
-
-          const userWithRole = {
-            ...session.user,
-            role: profile?.role || "standard",
-          }
-
-          setUser(userWithRole)
-          setIsAdmin(profile?.role === "admin")
-          console.log("User role set to:", profile?.role, "isAdmin:", profile?.role === "admin")
         } else {
           setUser(null)
           setIsAdmin(false)
@@ -87,27 +99,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(session)
 
           if (session?.user) {
-            // Fetch user role from profiles
-            const { data: profile, error: profileError } = await supabase
-              .from("profiles")
-              .select("role")
-              .eq("id", session.user.id)
-              .single()
+            try {
+              // Fetch user role from profiles
+              const { data: profile, error: profileError } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", session.user.id)
+                .single()
 
-            console.log("Profile data on auth change:", profile, "Error:", profileError)
+              if (profileError && profileError.code !== "PGRST116") {
+                console.error("Error fetching profile:", profileError.message)
+              }
 
-            if (profileError && profileError.code !== "PGRST116") {
-              console.error("Error fetching profile:", profileError.message)
+              const userWithRole = {
+                ...session.user,
+                role: profile?.role || "standard",
+              }
+
+              setUser(userWithRole)
+              setIsAdmin(profile?.role === "admin")
+            } catch (profileFetchError) {
+              console.error("Error in auth state change:", profileFetchError)
+              // Set user with default role
+              setUser({
+                ...session.user,
+                role: "standard",
+              })
+              setIsAdmin(false)
             }
-
-            const userWithRole = {
-              ...session.user,
-              role: profile?.role || "standard",
-            }
-
-            setUser(userWithRole)
-            setIsAdmin(profile?.role === "admin")
-            console.log("User role updated to:", profile?.role, "isAdmin:", profile?.role === "admin")
           } else {
             setUser(null)
             setIsAdmin(false)
