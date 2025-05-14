@@ -1,7 +1,6 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
 import { motion } from "framer-motion"
 import { MapPin } from "lucide-react"
 
@@ -53,7 +52,11 @@ export default function LocationPage() {
         <Card className="border-[#B89068]/20 overflow-hidden bg-[#3B4A3A]">
           <CardContent className="p-0">
             <div className="aspect-video relative">
-              <Image src="/bali-aerial-location.png" alt="Sanctum Location Aerial View" fill className="object-cover" />
+              <img
+                src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_04_Aerial.jpg"
+                alt="Sanctum Location Aerial View"
+                className="w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                 <MapPin className="h-24 w-24 text-[#B89068]" />
               </div>
@@ -96,7 +99,11 @@ export default function LocationPage() {
         <Card className="border-[#B89068]/20 overflow-hidden bg-[#3B4A3A]">
           <CardContent className="p-0">
             <div className="aspect-square relative">
-              <Image src="/bali-location-map.png" alt="Sanctum Location Map" fill className="object-cover" />
+              <img
+                src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_12_Gateway.jpg"
+                alt="Sanctum Location Map"
+                className="w-full h-full object-cover"
+              />
             </div>
           </CardContent>
         </Card>
@@ -120,7 +127,11 @@ export default function LocationPage() {
         <Card className="border-[#B89068]/20 overflow-hidden bg-[#3B4A3A]">
           <CardContent className="p-0">
             <div className="aspect-video relative">
-              <Image src="/bali-waterfall-sanctuary.png" alt="Sanctum Waterfall" fill className="object-cover" />
+              <img
+                src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_18_Waterfall.jpg"
+                alt="Sanctum Waterfall"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="p-6 space-y-4">
               <h3 className="text-xl font-bold text-white">Natural Wonders</h3>
@@ -136,7 +147,11 @@ export default function LocationPage() {
         <Card className="border-[#B89068]/20 overflow-hidden bg-[#3B4A3A]">
           <CardContent className="p-0">
             <div className="aspect-video relative">
-              <Image src="/bali-rice-terraces.png" alt="Surrounding Landscape" fill className="object-cover" />
+              <img
+                src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_06_SunLounges.jpg"
+                alt="Surrounding Landscape"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="p-6 space-y-4">
               <h3 className="text-xl font-bold text-white">Surrounding Area</h3>

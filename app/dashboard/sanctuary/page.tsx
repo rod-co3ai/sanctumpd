@@ -1,7 +1,6 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
 import { motion } from "framer-motion"
 
 export default function SanctuaryPage() {
@@ -33,7 +32,11 @@ export default function SanctuaryPage() {
         <Card className="border-[#B89068]/20 overflow-hidden">
           <CardContent className="p-0">
             <div className="aspect-video relative">
-              <Image src="/balinese-serenity.png" alt="Sanctum Overview" fill className="object-cover" />
+              <img
+                src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_02_Resort.jpg"
+                alt="Sanctum Overview"
+                className="w-full h-full object-cover"
+              />
             </div>
           </CardContent>
         </Card>
@@ -79,7 +82,11 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/balinese-farm-to-table-feast.png" alt="Farm-to-Table" fill className="object-cover" />
+                <img
+                  src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_05_Pool.jpg"
+                  alt="Farm-to-Table"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">Farm-to-Table</h3>
@@ -94,7 +101,11 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/tropical-fitness-retreat.png" alt="State-of-the-Art Gym" fill className="object-cover" />
+                <img
+                  src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_11_Gym.jpg"
+                  alt="State-of-the-Art Gym"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">State-of-the-Art Gym</h3>
@@ -110,7 +121,11 @@ export default function SanctuaryPage() {
           <Card className="border-[#B89068]/20 overflow-hidden">
             <CardContent className="p-0">
               <div className="aspect-video relative">
-                <Image src="/bali-spa-waterfall.png" alt="Luxury Spa" fill className="object-cover" />
+                <img
+                  src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_08_Spa.jpg"
+                  alt="Luxury Spa"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6 space-y-4">
                 <h3 className="text-xl font-bold text-white">Luxury Spa</h3>

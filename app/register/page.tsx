@@ -72,18 +72,31 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#F8F5F0] p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      style={{
+        backgroundImage:
+          'url("https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_15_SuiteInside.jpg")',
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(255, 255, 255, 0.85)",
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="border-[#B68D53]/20 shadow-lg">
+        <Card className="border-[#B68D53]/20 shadow-lg backdrop-blur-sm">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 flex items-center justify-center">
-                <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />
+              <div className="flex items-center gap-0">
+                <div className="h-12 w-12 flex items-center justify-center">
+                  <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />
+                </div>
+                <div style={{ marginTop: "8px" }}>
+                  <img src="/sanctum-word-gold.png" alt="SANCTUM" className="h-24" />
+                </div>
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-center text-[#503E24]">Request Investor Access</CardTitle>

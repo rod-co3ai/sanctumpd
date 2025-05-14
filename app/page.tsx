@@ -1,16 +1,15 @@
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#3B4A3A] to-[#2A362A]">
       <header className="container mx-auto py-6 flex justify-between items-center">
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0">
           <div className="h-16 w-16 flex items-center justify-center">
             <img src="/sanctum-logo.png" alt="Sanctum Logo" className="h-16 w-16" />
           </div>
-          <div className="h-32 flex items-center">
+          <div className="h-32 flex items-center" style={{ marginTop: "8px" }}>
             <img src="/sanctum-word-gold.png" alt="SANCTUM" className="h-32" />
           </div>
         </div>
@@ -54,12 +53,10 @@ export default function Home() {
             </div>
           </div>
           <div className="flex-1 relative h-[400px] w-full rounded-xl overflow-hidden shadow-xl">
-            <Image
-              src="/sanctum-bali-resort.jpeg"
-              alt="Sanctum Bali Resort"
-              fill
-              className="object-cover rounded-xl"
-              priority
+            <img
+              src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_01_Point.jpg"
+              alt="Sanctum Bali Point View"
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute bottom-4 right-4 h-12 w-12 flex items-center justify-center">
               <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />

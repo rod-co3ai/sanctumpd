@@ -28,7 +28,13 @@ export default function LoginPage() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const { data } = await supabase.auth.getSession()
+        const { data, error } = await supabase.auth.getSession()
+
+        if (error) {
+          console.error("Session check error:", error)
+          return
+        }
+
         if (data.session) {
           window.location.href = "/dashboard"
         }
@@ -81,18 +87,31 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#3B4A3A] p-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-[#3B4A3A] p-4 bg-cover bg-center"
+      style={{
+        backgroundImage:
+          'url("https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_07_Reception.jpg")',
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(59, 74, 58, 0.85)",
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <Card className="border-[#B89068]/20 bg-[#2A362A] shadow-lg">
+        <Card className="border-[#B89068]/20 bg-[#2A362A]/90 shadow-lg backdrop-blur-sm">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 flex items-center justify-center">
-                <img src="/sanctum-logo.png" alt="Sanctum" className="h-12 w-12" />
+              <div className="flex items-center gap-0">
+                <div className="h-12 w-12 flex items-center justify-center">
+                  <img src="/sanctum-logo.png" alt="Sanctum Logo" className="h-12 w-12" />
+                </div>
+                <div style={{ marginTop: "8px" }}>
+                  <img src="/sanctum-word-gold.png" alt="SANCTUM" className="h-24" />
+                </div>
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-center text-white">Investor Portal</CardTitle>

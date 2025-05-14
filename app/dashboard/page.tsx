@@ -57,7 +57,11 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="md:w-1/3 h-64 rounded-lg overflow-hidden">
-          <img src="/balinese-river-retreat.png" alt="Sanctum Bali Retreat" className="w-full h-full object-cover" />
+          <img
+            src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_10_CircleArch.jpg"
+            alt="Sanctum Bali Circular Entrance"
+            className="w-full h-full object-cover"
+          />
         </div>
       </motion.div>
 
@@ -251,7 +255,7 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
           <TabsContent value="team">
-            <Card className="border-[#B89কিন্ত068]/20 bg-[#3B4A3A]">
+            <Card className="border-[#B89068]/20 bg-[#3B4A3A]">
               <CardHeader>
                 <CardTitle className="text-white">Leadership Team</CardTitle>
               </CardHeader>
