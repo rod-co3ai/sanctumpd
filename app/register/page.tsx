@@ -75,8 +75,7 @@ export default function RegisterPage() {
     <div
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
       style={{
-        backgroundImage:
-          'url("https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_15_SuiteInside.jpg")',
+        backgroundImage: 'url("/Render_15_SuiteInside.jpg")',
         backgroundBlendMode: "overlay",
         backgroundColor: "rgba(255, 255, 255, 0.85)",
       }}

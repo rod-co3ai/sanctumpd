@@ -90,8 +90,7 @@ export default function LoginPage() {
     <div
       className="min-h-screen flex items-center justify-center bg-[#3B4A3A] p-4 bg-cover bg-center"
       style={{
-        backgroundImage:
-          'url("https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_07_Reception.jpg")',
+        backgroundImage: 'url("/Render_07_Reception.jpg")',
         backgroundBlendMode: "overlay",
         backgroundColor: "rgba(59, 74, 58, 0.85)",
       }}

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowRight, BarChart3, Building2, Compass, FileText, Globe, Hexagon } from "lucide-react"
@@ -56,11 +57,13 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-        <div className="md:w-1/3 h-64 rounded-lg overflow-hidden">
-          <img
-            src="https://raw.githubusercontent.com/rod-co3ai/sanctumpd/main/public/Render_10_CircleArch.jpg"
+        <div className="md:w-1/3 h-64 rounded-lg overflow-hidden relative">
+          <Image
+            src="/Render_10_CircleArch.jpg"
             alt="Sanctum Bali Circular Entrance"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
           />
         </div>
       </motion.div>
